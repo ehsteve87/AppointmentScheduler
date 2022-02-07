@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+  <tabs>
+    <Tab fx:id="tabAppointments" text="Appointments">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TableView fx:id="tblAppointments" layoutX="40.0" layoutY="143.0" prefHeight="510.0" prefWidth="1200.0">
+                    <columns>
+                      <TableColumn fx:id="colApptId" prefWidth="112.0" text="Appt. ID" />
+                      <TableColumn fx:id="colApptTitle" prefWidth="154.0" text="Title" />
+                        <TableColumn fx:id="colApptDescription" prefWidth="226.0" text="Description" />
+                        <TableColumn fx:id="colApptLocation" prefWidth="78.0" text="Location" />
+                        <TableColumn fx:id="colApptContact" prefWidth="168.0" text="Contact" />
+                        <TableColumn fx:id="colApptStart" prefWidth="171.0" text="Start" />
+                        <TableColumn fx:id="colApptEnd" minWidth="8.0" prefWidth="155.0" text="End" />
+                        <TableColumn fx:id="colApptCustomerId" prefWidth="97.0" text="Customer ID" />
+                        <TableColumn fx:id="colApptUserId" prefWidth="119.0" text="User ID" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <RadioButton fx:id="rdoAllTime" layoutX="947.0" layoutY="111.0" mnemonicParsing="false" onAction="#allTimeRadioButton" selected="true" text="All Time">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="timeFilter" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="rdoThisWeek" layoutX="1025.0" layoutY="111.0" mnemonicParsing="false" onAction="#thisWeekRadioButton" text="This Week" toggleGroup="$timeFilter" />
+                  <RadioButton fx:id="rdoThisMonth" layoutX="1121.0" layoutY="111.0" mnemonicParsing="false" onAction="#thisMonthRadioButton" text="This Month" toggleGroup="$timeFilter" />
+                  <Label layoutX="515.0" layoutY="27.0" text="Appointments">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="337.0" layoutY="111.0" text="Search by:" />
+                  <ComboBox fx:id="cboSearchAppointments" layoutX="403.0" layoutY="107.0" onAction="#appointmentSearchCombo" prefHeight="25.0" prefWidth="120.0" promptText="Pick one" />
+                  <TextField fx:id="tfSearchAppointments" layoutX="541.0" layoutY="107.0" onKeyReleased="#appointmentSearchField" prefHeight="25.0" prefWidth="342.0" />
+                  <Button fx:id="btnUpdateAppointment" layoutX="174.0" layoutY="106.0" mnemonicParsing="false" onAction="#updateAppointmentButton" prefHeight="28.0" prefWidth="61.0" text="Update" />
+                  <Button fx:id="btnDeleteAppointment" layoutX="246.0" layoutY="106.0" mnemonicParsing="false" onAction="#deleteAppointmentButton" prefHeight="28.0" prefWidth="61.0" text="Delete" />
+                  <Button fx:id="btnNewAppointment" layoutX="47.0" layoutY="106.0" mnemonicParsing="false" onAction="#newAppointmentButton" prefHeight="28.0" prefWidth="116.0" text="New Appointment" />
+                  <CheckBox fx:id="ckbxPastAppointments" layoutX="1044.0" layoutY="661.0" mnemonicParsing="false" onAction="#showPastAppointmentsCheckBox" text="Show Past Appointments" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+    <Tab fx:id="tabCustomers" text="Customers">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TableView layoutX="40.0" layoutY="143.0" prefHeight="510.0" prefWidth="1200.0">
+                    <columns>
+                      <TableColumn text="Customer ID" />
+                      <TableColumn prefWidth="149.0" text="Name" />
+                        <TableColumn prefWidth="157.0" text="Address" />
+                        <TableColumn prefWidth="76.0" text="Postal Code" />
+                        <TableColumn prefWidth="67.0" text="Divison" />
+                        <TableColumn prefWidth="68.0" text="Country" />
+                        <TableColumn prefWidth="145.0" text="Phone" />
+                        <TableColumn prefWidth="107.0" text="Date of Creation" />
+                        <TableColumn prefWidth="118.0" text="Created By" />
+                        <TableColumn minWidth="5.0" prefWidth="107.0" text="Last Update" />
+                        <TableColumn prefWidth="123.0" text="Updated By" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <Label layoutX="547.0" layoutY="27.0" text="Customers">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btnNewCustomer" layoutX="47.0" layoutY="106.0" mnemonicParsing="false" onAction="#newCustomerButton" prefHeight="28.0" prefWidth="116.0" text="New Customer" />
+                  <Button fx:id="btnUpdateCustomer" layoutX="174.0" layoutY="106.0" mnemonicParsing="false" onAction="#updateCustomerButton" prefHeight="28.0" prefWidth="61.0" text="Update" />
+                  <Button fx:id="btnDeleteCustomer" layoutX="246.0" layoutY="106.0" mnemonicParsing="false" onAction="#deleteCustomerButton" prefHeight="28.0" prefWidth="61.0" text="Delete" />
+                  <Label layoutX="337.0" layoutY="111.0" text="Search by:" />
+                  <ComboBox fx:id="cboSearchCustomers" layoutX="403.0" layoutY="107.0" onAction="#searchCustomersCombo" prefHeight="25.0" prefWidth="120.0" promptText="Pick one" />
+                  <TextField fx:id="tfSearchCustomers" layoutX="541.0" layoutY="107.0" onKeyReleased="#searchCustomersTextField" prefHeight="25.0" prefWidth="342.0" />
+                  <Button fx:id="btnCreateApptForCustomer" layoutX="985.0" layoutY="106.0" mnemonicParsing="false" prefHeight="28.0" text="Create Appointment for Selected Customer" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+      <Tab text="Reports">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TableView fx:id="tblClientSchedule" layoutX="158.0" layoutY="442.0" prefHeight="209.0" prefWidth="964.0">
+                    <columns>
+                      <TableColumn fx:id="colScheduleApptId" prefWidth="119.0" text="Appointment ID" />
+                        <TableColumn fx:id="colScheduleStart" prefWidth="129.0" text="Start Date and Time" />
+                        <TableColumn fx:id="colScheduleEnd" prefWidth="121.0" text="End Date and Time" />
+                      <TableColumn fx:id="colScheduleTitle" prefWidth="186.0" text="Title" />
+                        <TableColumn fx:id="colScheduleType" prefWidth="110.0" text="Type" />
+                        <TableColumn fx:id="colScheduleDescription" prefWidth="219.0" text="Description" />
+                        <TableColumn fx:id="colCustomerId" prefWidth="79.0" text="Customer ID" />
+                    </columns>
+                  </TableView>
+                  <Label layoutX="548.0" layoutY="367.0" text="View Client Schedule">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cboClientSchedule" layoutX="507.0" layoutY="404.0" prefHeight="25.0" prefWidth="267.0" promptText="Choose a Client to View Their Schedule" />
+                  <Label layoutX="206.0" layoutY="132.0" text="Appointment Counter">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cboCounterMonth" layoutX="228.0" layoutY="175.0" prefWidth="150.0" promptText="Pick a Month" />
+                  <ComboBox fx:id="cboCounterType" layoutX="228.0" layoutY="212.0" prefWidth="150.0" promptText="Pick a Type" />
+                  <Label layoutX="218.0" layoutY="252.0" text="Number of appointments:" />
+                  <Label fx:id="lblCount" layoutX="372.0" layoutY="252.0" text="0" />
+                  <Label layoutX="572.0" layoutY="27.0" text="Reports">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="872.0" layoutY="132.0" text="Appointment Length">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cboLengthType" layoutX="889.0" layoutY="175.0" prefWidth="150.0" promptText="Pick a Type" />
+                  <Label layoutX="852.0" layoutY="216.0" text="Average Appointment Length:" />
+                  <Label fx:id="lblAverageLength" layoutX="1024.0" layoutY="216.0" text="0 Minutes" />
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+  </tabs>
+</TabPane>
