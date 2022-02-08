@@ -93,7 +93,7 @@
                   <Label layoutX="337.0" layoutY="111.0" text="Search by:" />
                   <ComboBox fx:id="cboSearchCustomers" layoutX="403.0" layoutY="107.0" onAction="#searchCustomersCombo" prefHeight="25.0" prefWidth="120.0" promptText="Pick one" />
                   <TextField fx:id="tfSearchCustomers" layoutX="541.0" layoutY="107.0" onKeyReleased="#searchCustomersTextField" prefHeight="25.0" prefWidth="342.0" />
-                  <Button fx:id="btnCreateApptForCustomer" layoutX="985.0" layoutY="106.0" mnemonicParsing="false" prefHeight="28.0" text="Create Appointment for Selected Customer" />
+                  <Button fx:id="btnCreateApptForCustomer" onAction="#createApptForCustomerButton" layoutX="985.0" layoutY="106.0" mnemonicParsing="false" prefHeight="28.0" text="Create Appointment for Selected Customer" />
                </children></AnchorPane>
       </content>
     </Tab>

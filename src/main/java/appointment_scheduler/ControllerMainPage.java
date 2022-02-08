@@ -2,17 +2,15 @@ package appointment_scheduler;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class ControllerMainPage {
 
@@ -168,13 +166,32 @@ public class ControllerMainPage {
     }
 
     @FXML
-    private void newAppointmentButton(ActionEvent event) {
-
+    private void newAppointmentButton(ActionEvent event) throws IOException {
+        Stage newWindow = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("newAppointment.fxml"));
+        Scene newAppointmentPage = new Scene(fxmlLoader.load(), 600,400);
+        newWindow.setTitle("New Appointment");
+        newWindow.setScene(newAppointmentPage);
+        newWindow.initModality(Modality.WINDOW_MODAL);
+        newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
+        newWindow.show();
     }
 
     @FXML
-    private void newCustomerButton(ActionEvent event) {
+    private void newCustomerButton(ActionEvent event) throws IOException {
+        Stage newWindow = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("newCustomer.fxml"));
+        Scene newCustomerPage = new Scene(fxmlLoader.load(), 600,400);
+        newWindow.setTitle("New Customer");
+        newWindow.setScene(newCustomerPage);
+        newWindow.initModality(Modality.WINDOW_MODAL);
+        newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
+        newWindow.show();
+    }
 
+    @FXML
+    private void createApptForCustomerButton(ActionEvent event) throws IOException {
+        newAppointmentButton(event);
     }
 
     @FXML
@@ -203,13 +220,27 @@ public class ControllerMainPage {
     }
 
     @FXML
-    private void updateAppointmentButton(ActionEvent event) {
-
+    private void updateAppointmentButton(ActionEvent event) throws IOException {
+        Stage newWindow = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("updateAppointment.fxml"));
+        Scene updateAppointmentPage = new Scene(fxmlLoader.load(), 600,400);
+        newWindow.setTitle("Update Appointment");
+        newWindow.setScene(updateAppointmentPage);
+        newWindow.initModality(Modality.WINDOW_MODAL);
+        newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
+        newWindow.show();
     }
 
     @FXML
-    private void updateCustomerButton(ActionEvent event) {
-
+    private void updateCustomerButton(ActionEvent event) throws IOException {
+        Stage newWindow = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("updateCustomer.fxml"));
+        Scene updateCustomerPage = new Scene(fxmlLoader.load(), 600,400);
+        newWindow.setTitle("Update Customer");
+        newWindow.setScene(updateCustomerPage);
+        newWindow.initModality(Modality.WINDOW_MODAL);
+        newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
+        newWindow.show();
     }
 
 }
