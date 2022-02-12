@@ -3,7 +3,7 @@ package appointment_scheduler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class BusinessHours {
+public abstract class BusinessHours {
 
     /**
      * This method generates a list of all available appointment times, from 8:00 AM until 10:00 PM

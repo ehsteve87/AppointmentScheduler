@@ -1,8 +1,10 @@
 package appointment_scheduler;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public abstract class TimeConverter {
     public static final ZoneId utcZone = ZoneId.of("Etc/UTC");
@@ -14,6 +16,13 @@ public abstract class TimeConverter {
         return convertedToUtc;
     }
 
+    public static ZonedDateTime extractTimestampToUtc(Timestamp timestamp){
+        LocalDateTime ldt = timestamp.toLocalDateTime();
+        ZonedDateTime zdt = ZonedDateTime.of(ldt, ZoneId.systemDefault());
+        return zdt.withZoneSameInstant(utcZone);
+    }
+
+    public static DateTimeFormatter fullFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy h:mm a");
 
     public static ZonedDateTime convertToLocal(ZonedDateTime time){
         return time.withZoneSameInstant(ZoneId.systemDefault());

@@ -1,5 +1,6 @@
 package appointment_scheduler;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 public class Appointment extends Updatable{
@@ -13,6 +14,10 @@ public class Appointment extends Updatable{
     private int customerId;
     private int userId;
     private int contactId;
+    private String startTimeString;
+    private String endTimeString;
+
+
 
     public Appointment(int id, String title, String description, String location, String type, ZonedDateTime startTime, ZonedDateTime endTime, int customerId, int userId, int contactId) {
         super();
@@ -26,7 +31,10 @@ public class Appointment extends Updatable{
         this.customerId = customerId;
         this.userId = userId;
         this.contactId = contactId;
+        this.startTimeString = TimeConverter.fullFormatter.format(this.startTime.withZoneSameInstant(ZoneId.systemDefault()));
+        this.endTimeString = TimeConverter.fullFormatter.format(this.endTime.withZoneSameInstant(ZoneId.systemDefault()));
     }
+
 
     public int getId() {
         return id;
@@ -68,6 +76,14 @@ public class Appointment extends Updatable{
         return contactId;
     }
 
+    public String getStartTimeString() {
+        return startTimeString;
+    }
+
+    public String getEndTimeString() {
+        return endTimeString;
+    }
+
     public void setTitle(String title) {
         this.title = title;
         update();
@@ -90,11 +106,13 @@ public class Appointment extends Updatable{
 
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
+        this.startTimeString = TimeConverter.fullFormatter.format(startTime.withZoneSameInstant(ZoneId.systemDefault()));
         update();
     }
 
     public void setEndTime(ZonedDateTime endTime) {
         this.endTime = endTime;
+        this.endTimeString = TimeConverter.fullFormatter.format(endTime.withZoneSameInstant(ZoneId.systemDefault()));
         update();
     }
 

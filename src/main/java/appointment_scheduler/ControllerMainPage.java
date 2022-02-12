@@ -6,13 +6,56 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ControllerMainPage {
+
+    public void initialize(){
+        //Load appointments from Database
+        try(PreparedStatement ps = JDBC.conn.prepareStatement("SELECT * FROM appointments;");
+            ResultSet rs = ps.executeQuery()){
+            while(rs.next()) {
+                Appointment apptToAdd = new Appointment(
+                        rs.getInt("Appointment_ID"),
+                        rs.getString("Title"),
+                        rs.getString("Description"),
+                        rs.getString("Location"),
+                        rs.getString("Type"),
+                        TimeConverter.extractTimestampToUtc(rs.getTimestamp("Start")),
+                        TimeConverter.extractTimestampToUtc(rs.getTimestamp("End")),
+                        rs.getInt("Customer_ID"),
+                        rs.getInt("User_ID"),
+                        rs.getInt("Contact_ID")
+                );
+                apptToAdd.setCreateDate(TimeConverter.extractTimestampToUtc(rs.getTimestamp("Create_Date")));
+                apptToAdd.setLastUpdate(TimeConverter.extractTimestampToUtc(rs.getTimestamp("Last_Update")));
+            DatabaseLists.getApptList().add(apptToAdd);
+            }
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+
+        tfSearchAppointments.setText("");
+        tblAppointments.setItems(DatabaseLists.getApptList());
+        colApptId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colApptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        colApptDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        colApptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+//        colApptContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        colApptStart.setCellValueFactory(new PropertyValueFactory<>("startTimeString"));
+        colApptEnd.setCellValueFactory(new PropertyValueFactory<>("endTimeString"));
+        colApptCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        colApptUserId.setCellValueFactory(new PropertyValueFactory<>("userId"));
+
+    }
 
     @FXML
     private Button btnCreateApptForCustomer;
@@ -57,31 +100,31 @@ public class ControllerMainPage {
     private CheckBox ckbxPastAppointments;
 
     @FXML
-    private TableColumn<?, ?> colApptContact;
+    private TableColumn<Appointment, String> colApptContact;
 
     @FXML
-    private TableColumn<?, ?> colApptCustomerId;
+    private TableColumn<Appointment, Integer> colApptCustomerId;
 
     @FXML
-    private TableColumn<?, ?> colApptDescription;
+    private TableColumn<Appointment, String> colApptDescription;
 
     @FXML
-    private TableColumn<?, ?> colApptEnd;
+    private TableColumn<Appointment, String> colApptEnd;
 
     @FXML
-    private TableColumn<?, ?> colApptId;
+    private TableColumn<Appointment, Integer> colApptId;
 
     @FXML
-    private TableColumn<?, ?> colApptLocation;
+    private TableColumn<Appointment, String> colApptLocation;
 
     @FXML
-    private TableColumn<?, ?> colApptStart;
+    private TableColumn<Appointment, String> colApptStart;
 
     @FXML
-    private TableColumn<?, ?> colApptTitle;
+    private TableColumn<Appointment, String> colApptTitle;
 
     @FXML
-    private TableColumn<?, ?> colApptUserId;
+    private TableColumn<Appointment, Integer> colApptUserId;
 
     @FXML
     private TableColumn<?, ?> colCustomerId;
@@ -126,7 +169,7 @@ public class ControllerMainPage {
     private Tab tabCustomers;
 
     @FXML
-    private TableView<?> tblAppointments;
+    private TableView<Appointment> tblAppointments;
 
     @FXML
     private TableView<?> tblClientSchedule;

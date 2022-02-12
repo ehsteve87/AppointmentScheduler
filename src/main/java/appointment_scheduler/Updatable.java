@@ -15,6 +15,7 @@ public abstract class Updatable {
         this.lastUpdatedBy = User.getLoggedInUser();
     }
 
+
     public void update(){
         this.lastUpdate = TimeConverter.getNowInUtc();
         this.lastUpdatedBy = User.getLoggedInUser();

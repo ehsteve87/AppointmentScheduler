@@ -12,7 +12,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("loginScreen.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainPage.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
         stage.setTitle("Appointment Scheduler");
         stage.setScene(scene);
@@ -20,7 +20,9 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        JDBC.openConnection();
         Locale.setDefault(new Locale("fr"));
         launch();
+        JDBC.closeConnection();
     }
 }
