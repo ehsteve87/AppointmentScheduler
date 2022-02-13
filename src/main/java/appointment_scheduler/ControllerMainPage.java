@@ -36,7 +36,6 @@ public class ControllerMainPage {
                 System.out.println(e);
             }
         }
-        System.out.println(possibleUsers);
 
         //Create Set of all Users
         Set<String> currentUsers = new HashSet<>();
@@ -48,7 +47,6 @@ public class ControllerMainPage {
         } catch (SQLException e) {
             System.out.println(e);
         }
-        System.out.println(currentUsers);
 
         //Create any users that should exist but don't
         ArrayList<String> pu = new ArrayList<>();
@@ -69,14 +67,11 @@ public class ControllerMainPage {
                     try {
                         JDBC.conn.prepareStatement(sql).executeUpdate();
                     } catch (SQLException e) {
-                        System.out.println(e);
+
                     }
                 }
             }
         }
-
-
-
 
 
         //Load users from Database
@@ -172,6 +167,52 @@ public class ControllerMainPage {
             System.out.println(e);
         }
 
+        //populate search appts combo box
+        cboSearchAppointments.getItems().clear();
+        cboSearchAppointments.getItems().addAll(
+                "Appt. ID",
+                "Title",
+                "Description",
+                "Location",
+                "Contact",
+                "Start",
+                "End",
+                "Customer ID",
+                "User ID");
+
+        //populate Search Customers combo box
+        cboSearchCustomers.getItems().clear();
+        cboSearchCustomers.getItems().addAll(
+                "Customer ID",
+                "Name",
+                "Address",
+                "Postal Code",
+                "Division",
+                "Country",
+                "Phone",
+                "Date of Creation",
+                "Created By",
+                "Last Update",
+                "Updated By"
+        );
+
+        //populate type combo boxes on reports tab
+        cboCounterType.getItems().clear();
+        cboCounterType.getItems().add("All Types");
+        cboLengthType.getItems().clear();
+        cboLengthType.getItems().add("All Types");
+        Set<String> apptTypes = new HashSet<>();
+        //LAMBDA
+        DatabaseLists.getApptList().forEach(a -> apptTypes.add(a.getType()));
+        ArrayList<String> types = new ArrayList<>();
+        for(String x : apptTypes){
+            types.add(x);
+        }
+        //LAMBDA
+        types.forEach(t -> cboCounterType.getItems().add(t));
+        //LAMBDA
+        types.forEach(t -> cboLengthType.getItems().add(t));
+
 
         tfSearchAppointments.setText("");
         tblAppointments.setItems(DatabaseLists.getApptList());
@@ -229,16 +270,16 @@ public class ControllerMainPage {
     private ComboBox<?> cboCounterMonth;
 
     @FXML
-    private ComboBox<?> cboCounterType;
+    private ComboBox<String> cboCounterType;
 
     @FXML
-    private ComboBox<?> cboLengthType;
+    private ComboBox<String> cboLengthType;
 
     @FXML
-    private ComboBox<?> cboSearchAppointments;
+    private ComboBox<String> cboSearchAppointments;
 
     @FXML
-    private ComboBox<?> cboSearchCustomers;
+    private ComboBox<String> cboSearchCustomers;
 
     @FXML
     private CheckBox ckbxPastAppointments;
