@@ -16,6 +16,7 @@ public class Appointment extends Updatable{
     private int contactId;
     private String startTimeString;
     private String endTimeString;
+    private String contactName;
 
 
 
@@ -84,6 +85,10 @@ public class Appointment extends Updatable{
         return endTimeString;
     }
 
+    public String getContactName() {
+        return contactName;
+    }
+
     public void setTitle(String title) {
         this.title = title;
         update();
@@ -129,5 +134,9 @@ public class Appointment extends Updatable{
     public void setContactId(int contactId) {
         this.contactId = contactId;
         update();
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
     }
 }

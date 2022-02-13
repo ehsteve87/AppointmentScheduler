@@ -37,6 +37,18 @@ public class ControllerMainPage {
                 );
                 apptToAdd.setCreateDate(TimeConverter.extractTimestampToUtc(rs.getTimestamp("Create_Date")));
                 apptToAdd.setLastUpdate(TimeConverter.extractTimestampToUtc(rs.getTimestamp("Last_Update")));
+
+                //this try block gets the Contact name from the database and assigns it to the Appointment instance
+                try(PreparedStatement psb = JDBC.conn.prepareStatement("SELECT Contact_Name FROM contacts WHERE Contact_ID = "
+                    + apptToAdd.getContactId());
+                    ResultSet rsb = psb.executeQuery()){
+                    if(rsb.next()) {
+                        apptToAdd.setContactName(rsb.getString("Contact_Name"));
+                    }
+                } catch (SQLException e){
+                    System.out.println(e);
+                }
+                System.out.println(apptToAdd.getContactName());
             DatabaseLists.getApptList().add(apptToAdd);
             }
         } catch (SQLException e){
@@ -49,7 +61,7 @@ public class ControllerMainPage {
         colApptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         colApptDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colApptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-//        colApptContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        colApptContact.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         colApptStart.setCellValueFactory(new PropertyValueFactory<>("startTimeString"));
         colApptEnd.setCellValueFactory(new PropertyValueFactory<>("endTimeString"));
         colApptCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
