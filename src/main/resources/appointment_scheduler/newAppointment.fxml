@@ -51,7 +51,7 @@
             <TextField fx:id="tfLocation" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <ComboBox fx:id="cboContact" prefHeight="25.0" prefWidth="219.0" promptText="Choose a Contact" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label text="End Date" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <DatePicker fx:id="dbEndDate" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <DatePicker fx:id="dpEndDate" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <ComboBox fx:id="cboType" prefHeight="25.0" prefWidth="218.0" promptText="Choose a type" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>

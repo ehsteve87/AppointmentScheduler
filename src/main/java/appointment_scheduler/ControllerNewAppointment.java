@@ -2,13 +2,35 @@ package appointment_scheduler;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
+
 public class ControllerNewAppointment {
+    public void initialize(){
+
+        //disable past dates
+        //LAMBDA
+        dpStartDate.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+
+                setDisable(empty || date.compareTo(today) < 0 );
+            }
+        });
+        //disable past dates
+        //LAMBDA
+        dpEndDate.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+
+                setDisable(empty || date.compareTo(today) < 0 );
+            }
+        });
+    }
 
     @FXML
     private Button btnCancel;
@@ -29,7 +51,7 @@ public class ControllerNewAppointment {
     private ComboBox<?> cboType;
 
     @FXML
-    private DatePicker dbEndDate;
+    private DatePicker dpEndDate;
 
     @FXML
     private DatePicker dpStartDate;
