@@ -15,10 +15,70 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ControllerMainPage {
 
     public void initialize(){
+        //Create Set of all possible users
+        Set<String> possibleUsers = new HashSet<>();
+        String[] tables = {"appointments", "countries", "customers", "first_level_divisions", "users"};
+        for(int i = 0; i < tables.length; i++) {
+            try (PreparedStatement ps = JDBC.conn.prepareStatement("SELECT Created_By, Last_Updated_By FROM " + tables[i] + ";");
+                 ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    possibleUsers.add(rs.getString("Created_By"));
+                    possibleUsers.add(rs.getString("Last_Updated_By"));
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+        System.out.println(possibleUsers);
+
+        //Create Set of all Users
+        Set<String> currentUsers = new HashSet<>();
+        try (PreparedStatement ps = JDBC.conn.prepareStatement("SELECT User_Name FROM users;");
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                currentUsers.add(rs.getString("User_Name"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        System.out.println(currentUsers);
+
+        //Create any users that should exist but don't
+        ArrayList<String> pu = new ArrayList<>();
+        ArrayList<String> cu = new ArrayList<>();
+        for(String x : possibleUsers){
+            pu.add(x);
+        }
+        for(String y : currentUsers){
+            cu.add(y);
+        }
+        for(int i = 0; i < pu.size(); i++){
+            for(int j = 0; j < cu.size(); j++){
+                //if potential user not in current users, create potential user
+                if(!cu.contains(pu.get(i))){
+                    String userToCreate = pu.get(i);
+                    String sql = "INSERT INTO users(User_Name, Password, Create_Date, Created_By, Last_Update, Last_Updated_By)\n" +
+                            "VALUES('" + userToCreate + "', '" + userToCreate + "', NOW(), '" + userToCreate + "', NOW(), '" + userToCreate + "');";
+                    try {
+                        JDBC.conn.prepareStatement(sql).executeUpdate();
+                    } catch (SQLException e) {
+                        System.out.println(e);
+                    }
+                }
+            }
+        }
+
+
+
+
+
         //Load users from Database
         DatabaseLists.getUserList().clear();
         String userQuery = "SELECT * FROM users;";
