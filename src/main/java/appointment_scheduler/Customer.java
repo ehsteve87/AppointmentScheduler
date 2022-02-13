@@ -7,8 +7,11 @@ public class Customer extends Updatable{
     private String postalCode;
     private String phone;
     private int divisionId;
+    private String divisionString;
+    private String countryString;
 
-    public Customer(int id, String name, String address, String postalCode, String phone, int divisionId) {
+
+    public Customer(int id, String name, String address, String postalCode, String phone, int divisionId, String divisionString, String countryString) {
         super();
         this.id = id;
         this.name = name;
@@ -16,6 +19,18 @@ public class Customer extends Updatable{
         this.postalCode = postalCode;
         this.phone = phone;
         this.divisionId = divisionId;
+    }
+
+    public Customer(boolean loadFromDatabase, int id, String name, String address, String postalCode, String phone, int divisionId, String divisionString, String countryString) {
+        super(loadFromDatabase);
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phone = phone;
+        this.divisionId = divisionId;
+        this.divisionString = divisionString;
+        this.countryString = countryString;
     }
 
     public int getId() {
@@ -42,6 +57,15 @@ public class Customer extends Updatable{
         return divisionId;
     }
 
+    public String getDivisionString() {
+        return divisionString;
+    }
+
+    public String getCountryString() {
+        return countryString;
+    }
+
+
     public void setName(String name) {
         this.name = name;
         update();
@@ -66,4 +90,17 @@ public class Customer extends Updatable{
         this.divisionId = divisionId;
         update();
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDivisionString(String divisionString) {
+        this.divisionString = divisionString;
+    }
+
+    public void setCountryString(String countryString) {
+        this.countryString = countryString;
+    }
+
 }

@@ -36,6 +36,22 @@ public class Appointment extends Updatable{
         this.endTimeString = TimeConverter.fullFormatter.format(this.endTime.withZoneSameInstant(ZoneId.systemDefault()));
     }
 
+    public Appointment(boolean loadFromDatabase, int id, String title, String description, String location, String type, ZonedDateTime startTime, ZonedDateTime endTime, int customerId, int userId, int contactId) {
+        super(loadFromDatabase);
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.customerId = customerId;
+        this.userId = userId;
+        this.contactId = contactId;
+        this.startTimeString = TimeConverter.fullFormatter.format(this.startTime.withZoneSameInstant(ZoneId.systemDefault()));
+        this.endTimeString = TimeConverter.fullFormatter.format(this.endTime.withZoneSameInstant(ZoneId.systemDefault()));
+    }
+
 
     public int getId() {
         return id;

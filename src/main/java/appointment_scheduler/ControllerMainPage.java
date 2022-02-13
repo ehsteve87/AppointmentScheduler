@@ -19,11 +19,36 @@ import java.sql.SQLException;
 public class ControllerMainPage {
 
     public void initialize(){
+        //Load users from Database
+        DatabaseLists.getUserList().clear();
+        String userQuery = "SELECT * FROM users;";
+        try(PreparedStatement ps = JDBC.conn.prepareStatement(userQuery);
+            ResultSet rs = ps.executeQuery()){
+            while(rs.next()){
+                User userToAdd = new User(
+                        rs.getInt("User_ID"),
+                        rs.getString("User_Name"),
+                        rs.getString("Password")
+                    );
+                DatabaseLists.getUserList().add(userToAdd);
+                }
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+
         //Load appointments from Database
-        try(PreparedStatement ps = JDBC.conn.prepareStatement("SELECT * FROM appointments;");
+        DatabaseLists.getApptList().clear();
+        String apptQuery = "SELECT a.Appointment_ID, a.Title, a.Description, a.Location, a.Type, a.Start, \n" +
+                            "a.End, a.Create_Date, a.Created_By, a.Last_Update, a.Last_Updated_By,\n" +
+                            "a.Customer_ID, a.User_ID, a.Contact_ID, c.Contact_Name\n" +
+                            "FROM appointments a\n" +
+                            "INNER JOIN contacts c\n" +
+                            "ON a.Contact_ID = c.Contact_ID;";
+        try(PreparedStatement ps = JDBC.conn.prepareStatement(apptQuery);
             ResultSet rs = ps.executeQuery()){
             while(rs.next()) {
                 Appointment apptToAdd = new Appointment(
+                        true,
                         rs.getInt("Appointment_ID"),
                         rs.getString("Title"),
                         rs.getString("Description"),
@@ -37,23 +62,56 @@ public class ControllerMainPage {
                 );
                 apptToAdd.setCreateDate(TimeConverter.extractTimestampToUtc(rs.getTimestamp("Create_Date")));
                 apptToAdd.setLastUpdate(TimeConverter.extractTimestampToUtc(rs.getTimestamp("Last_Update")));
-
-                //this try block gets the Contact name from the database and assigns it to the Appointment instance
-                try(PreparedStatement psb = JDBC.conn.prepareStatement("SELECT Contact_Name FROM contacts WHERE Contact_ID = "
-                    + apptToAdd.getContactId());
-                    ResultSet rsb = psb.executeQuery()){
-                    if(rsb.next()) {
-                        apptToAdd.setContactName(rsb.getString("Contact_Name"));
-                    }
-                } catch (SQLException e){
-                    System.out.println(e);
-                }
-                System.out.println(apptToAdd.getContactName());
+                apptToAdd.setContactName(rs.getString("Contact_Name"));
+                String createdBy = rs.getString("Created_By");
+                //LAMBDA
+                apptToAdd.setCreatedBy(DatabaseLists.findByProperty(DatabaseLists.getUserList(),u -> u.getUsername().equals(createdBy)));
+                String updatedBy = rs.getString("Last_Updated_By");
+                //LAMBDA
+                apptToAdd.setLastUpdatedBy(DatabaseLists.findByProperty(DatabaseLists.getUserList(),u->u.getUsername().equals(updatedBy)));
             DatabaseLists.getApptList().add(apptToAdd);
             }
         } catch (SQLException e){
             System.out.println(e);
         }
+
+        //load Customers from database
+        String customerQuery = "SELECT c.Customer_ID, c.Customer_Name, c.Address, c.Postal_Code, c.Phone, \n" +
+                "c.Create_Date, c.Created_By, c.Last_Update, c.Last_Updated_By, c.Division_ID,\n" +
+                "d.Division, countries.Country\n" +
+                "FROM customers c\n" +
+                "INNER JOIN first_level_divisions d\n" +
+                "ON d.Division_ID = c.Division_ID\n" +
+                "INNER JOIN countries\n" +
+                "ON d.Country_ID = countries.Country_ID;";
+        try(PreparedStatement ps = JDBC.conn.prepareStatement(customerQuery);
+            ResultSet rs = ps.executeQuery()){
+            while(rs.next()){
+                Customer customerToAdd = new Customer(
+                    true,
+                    rs.getInt("Customer_ID"),
+                    rs.getString("Customer_Name"),
+                    rs.getString("Address"),
+                    rs.getString("Postal_Code"),
+                    rs.getString("Phone"),
+                    rs.getInt("Division_ID"),
+                    rs.getString("Division"),
+                    rs.getString("Country")
+                );
+                customerToAdd.setCreateDate(TimeConverter.extractTimestampToUtc(rs.getTimestamp("Create_Date")));
+                customerToAdd.setLastUpdate(TimeConverter.extractTimestampToUtc(rs.getTimestamp("Last_Update")));
+                String createdBy = rs.getString("Created_By");
+                //LAMBDA
+                customerToAdd.setCreatedBy(DatabaseLists.findByProperty(DatabaseLists.getUserList(),u->u.getUsername().equals(createdBy)));
+                String updatedBy = rs.getString("Last_Updated_By");
+                //LAMBDA
+                customerToAdd.setLastUpdatedBy(DatabaseLists.findByProperty(DatabaseLists.getUserList(),u->u.getUsername().equals(updatedBy)));
+                DatabaseLists.getCustomerList().add(customerToAdd);
+            }
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+
 
         tfSearchAppointments.setText("");
         tblAppointments.setItems(DatabaseLists.getApptList());
@@ -66,6 +124,20 @@ public class ControllerMainPage {
         colApptEnd.setCellValueFactory(new PropertyValueFactory<>("endTimeString"));
         colApptCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         colApptUserId.setCellValueFactory(new PropertyValueFactory<>("userId"));
+
+        tfSearchCustomers.setText("");
+        tblCustomers.setItems(DatabaseLists.getCustomerList());
+        colCustId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colCustName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colCustAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        colCustPostal.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        colCustDivision.setCellValueFactory(new PropertyValueFactory<>("divisionString"));
+        colCustCountry.setCellValueFactory(new PropertyValueFactory<>("countryString"));
+        colCustPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        colCustCreateDate.setCellValueFactory(new PropertyValueFactory<>("createDateString"));
+        colCustCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdByString"));
+        colCustLastUpdate.setCellValueFactory(new PropertyValueFactory<>("lastUpdateString"));
+        colCustUpdatedBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedByString"));
 
     }
 
@@ -139,7 +211,43 @@ public class ControllerMainPage {
     private TableColumn<Appointment, Integer> colApptUserId;
 
     @FXML
-    private TableColumn<?, ?> colCustomerId;
+    private TableView<Customer> tblCustomers;
+
+    @FXML
+    private TableColumn<Customer, String> colCustAddress;
+
+    @FXML
+    private TableColumn<Customer, String> colCustCountry;
+
+    @FXML
+    private TableColumn<Customer, String> colCustCreateDate;
+
+    @FXML
+    private TableColumn<Customer, String> colCustCreatedBy;
+
+    @FXML
+    private TableColumn<Customer, String> colCustDivision;
+
+    @FXML
+    private TableColumn<Customer, Integer> colCustId;
+
+    @FXML
+    private TableColumn<Customer, String> colCustLastUpdate;
+
+    @FXML
+    private TableColumn<Customer, String> colCustName;
+
+    @FXML
+    private TableColumn<Customer, String> colCustPhone;
+
+    @FXML
+    private TableColumn<Customer, String> colCustPostal;
+
+    @FXML
+    private TableColumn<Customer, String> colCustUpdatedBy;
+
+    @FXML
+    private TableColumn<?, ?> colScheduleCustomerId;
 
     @FXML
     private TableColumn<?, ?> colScheduleApptId;
