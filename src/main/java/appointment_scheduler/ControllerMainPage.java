@@ -1,5 +1,6 @@
 package appointment_scheduler;
 
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -167,34 +167,27 @@ public class ControllerMainPage {
             System.out.println(e);
         }
 
-        //populate search appts combo box
-        cboSearchAppointments.getItems().clear();
-        cboSearchAppointments.getItems().addAll(
-                "Appt. ID",
-                "Title",
-                "Description",
-                "Location",
-                "Contact",
-                "Start",
-                "End",
-                "Customer ID",
-                "User ID");
+        //Load contacts from database
+        String contactQuery = "SELECT * FROM contacts;";
+        try(PreparedStatement ps = JDBC.conn.prepareStatement(contactQuery);
+            ResultSet rs = ps.executeQuery()){
+            while(rs.next()){
+                Contact contact = new Contact(
+                        rs.getInt("Contact_ID"),
+                        rs.getString("Contact_Name"),
+                        rs.getString("email")
+                );
+                DatabaseLists.getContactList().add(contact);
+            }
+        } catch (SQLException e){
+            System.out.println(e);
+        }
 
-        //populate Search Customers combo box
-        cboSearchCustomers.getItems().clear();
-        cboSearchCustomers.getItems().addAll(
-                "Customer ID",
-                "Name",
-                "Address",
-                "Postal Code",
-                "Division",
-                "Country",
-                "Phone",
-                "Date of Creation",
-                "Created By",
-                "Last Update",
-                "Updated By"
-        );
+        //populate contact combo box on reports tab
+        cboContactSchedule.getItems().clear();
+        //lambda
+        DatabaseLists.getContactList().forEach(c -> cboContactSchedule.getItems().add(c.getName()));
+
 
         //populate type combo boxes on reports tab
         cboCounterType.getItems().clear();
@@ -213,8 +206,8 @@ public class ControllerMainPage {
         //LAMBDA
         types.forEach(t -> cboLengthType.getItems().add(t));
 
+        rdoAllTime.setSelected(true);
 
-        tfSearchAppointments.setText("");
         tblAppointments.setItems(DatabaseLists.getApptList());
         colApptId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colApptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -226,7 +219,6 @@ public class ControllerMainPage {
         colApptCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         colApptUserId.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
-        tfSearchCustomers.setText("");
         tblCustomers.setItems(DatabaseLists.getCustomerList());
         colCustId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colCustName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -264,7 +256,7 @@ public class ControllerMainPage {
     private Button btnUpdateCustomer;
 
     @FXML
-    private ComboBox<?> cboClientSchedule;
+    private ComboBox<String> cboContactSchedule;
 
     @FXML
     private ComboBox<?> cboCounterMonth;
@@ -393,7 +385,7 @@ public class ControllerMainPage {
     private TableView<Appointment> tblAppointments;
 
     @FXML
-    private TableView<?> tblClientSchedule;
+    private TableView<?> tblContactSchedule;
 
     @FXML
     private TextField tfSearchAppointments;
@@ -404,20 +396,12 @@ public class ControllerMainPage {
     @FXML
     private ToggleGroup timeFilter;
 
-    @FXML
-    private void allTimeRadioButton(ActionEvent event) {
-
-    }
 
     @FXML
     private void appointmentSearchCombo(ActionEvent event) {
 
     }
 
-    @FXML
-    private void appointmentSearchField(KeyEvent event) {
-
-    }
 
     @FXML
     private void deleteAppointmentButton(ActionEvent event) {
@@ -458,29 +442,26 @@ public class ControllerMainPage {
         newAppointmentButton(event);
     }
 
-    @FXML
-    private void searchCustomersCombo(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void searchCustomersTextField(KeyEvent event) {
-
-    }
-
-    @FXML
-    private void showPastAppointmentsCheckBox(ActionEvent event) {
-
-    }
-
+    //lambda
     @FXML
     private void thisMonthRadioButton(ActionEvent event) {
-
+        tblAppointments.setItems(new FilteredList<>(DatabaseLists.getApptList(),
+                a -> a.getStartTime().isAfter(TimeConverter.getNowInUtc())
+                        && a.getStartTime().isBefore(TimeConverter.getNowInUtc().plusMonths(1))));
     }
 
+    //lambda
     @FXML
     private void thisWeekRadioButton(ActionEvent event) {
+        tblAppointments.setItems(new FilteredList<>(DatabaseLists.getApptList(),
+                a -> a.getStartTime().isAfter(TimeConverter.getNowInUtc())
+                    && a.getStartTime().isBefore(TimeConverter.getNowInUtc().plusWeeks(1))));
+    }
 
+    //lambda
+    @FXML
+    private void allTimeRadioButton(ActionEvent event) {
+        tblAppointments.setItems(new FilteredList<>(DatabaseLists.getApptList(), a -> true));
     }
 
     @FXML

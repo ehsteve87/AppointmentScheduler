@@ -11,8 +11,9 @@ public class DatabaseLists {
     private static ObservableList<Customer> customerList = FXCollections.observableArrayList();
     private static ObservableList<User> userList = FXCollections.observableArrayList();
     private static ObservableList<Appointment> apptList = FXCollections.observableArrayList();
-    private static ObservableList<Client> clientList = FXCollections.observableArrayList();
+    private static ObservableList<Contact> contactList = FXCollections.observableArrayList();
     private static ObservableList<Country> countryList = FXCollections.observableArrayList();
+
 
     public static <T> T findByProperty(Collection<T> col, Predicate<T> filter) {
         return col.stream().filter(filter).findFirst().orElse(null);
@@ -31,8 +32,8 @@ public class DatabaseLists {
         return apptList;
     }
 
-    public static ObservableList<Client> getClientList() {
-        return clientList;
+    public static ObservableList<Contact> getContactList() {
+        return contactList;
     }
 
     public static ObservableList<Country> getCountryList() {

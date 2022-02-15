@@ -1,17 +1,17 @@
 package appointment_scheduler;
 
-public class Client {
+public class Contact {
     private int id;
     private String name;
     private String email;
 
-    public Client(int id, String name, String email) {
+    public Contact(int id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
     }
 
-    public Client(String name, String email) {
+    public Contact(String name, String email) {
         this.name = name;
         this.email = email;
     }
