@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -206,8 +208,21 @@ public class ControllerMainPage {
         //LAMBDA
         types.forEach(t -> cboLengthType.getItems().add(t));
 
+        //Populate months combo box on reports page
+        HashSet<YearMonth> months = new HashSet<>();
+        DatabaseLists.getApptList().forEach(a -> months.add(YearMonth.from(a.getStartTime())));
+        ArrayList<YearMonth> monthsList = new ArrayList();
+        for(YearMonth y : months){
+            monthsList.add(y);
+        }
+        Collections.sort(monthsList);
+        monthsList.forEach(m -> cboCounterMonth.getItems().add(m.format(TimeConverter.monthFormatter)));
+
+
+
         rdoAllTime.setSelected(true);
 
+        //populate appointments table
         tblAppointments.setItems(DatabaseLists.getApptList());
         colApptId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colApptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -219,6 +234,7 @@ public class ControllerMainPage {
         colApptCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         colApptUserId.setCellValueFactory(new PropertyValueFactory<>("userId"));
 
+        //populate customers table
         tblCustomers.setItems(DatabaseLists.getCustomerList());
         colCustId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colCustName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -232,6 +248,7 @@ public class ControllerMainPage {
         colCustLastUpdate.setCellValueFactory(new PropertyValueFactory<>("lastUpdateString"));
         colCustUpdatedBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedByString"));
 
+        //populate contact schedule table
         tblContactSchedule.setItems(DatabaseLists.getApptList());
         colScheduleApptId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colScheduleStart.setCellValueFactory(new PropertyValueFactory<>("startTimeString"));
@@ -268,7 +285,10 @@ public class ControllerMainPage {
     private ComboBox<String> cboContactSchedule;
 
     @FXML
-    private ComboBox<?> cboCounterMonth;
+    private ComboBox<String> cboCounterMonth;
+
+    @FXML
+    private ComboBox<String> cboCounterYear;
 
     @FXML
     private ComboBox<String> cboCounterType;

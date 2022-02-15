@@ -88,7 +88,7 @@
     </Tab>
       <Tab text="Reports">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+          <AnchorPane fx:id="btnCountAppointments" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <TableView fx:id="tblContactSchedule" layoutX="158.0" layoutY="442.0" prefHeight="209.0" prefWidth="964.0">
                     <columns>
@@ -106,16 +106,14 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="cboContactSchedule" onAction="#filterContactSchedule" layoutX="507.0" layoutY="404.0" prefHeight="25.0" prefWidth="267.0" promptText="Choose a Contact to View Their Schedule" />
+                  <ComboBox fx:id="cboContactSchedule" layoutX="507.0" layoutY="404.0" onAction="#filterContactSchedule" prefHeight="25.0" prefWidth="267.0" promptText="Choose a Contact to View Their Schedule" />
                   <Label layoutX="206.0" layoutY="132.0" text="Appointment Counter">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="cboCounterMonth" layoutX="228.0" layoutY="175.0" prefWidth="150.0" promptText="Pick a Month" />
-                  <ComboBox fx:id="cboCounterType" layoutX="228.0" layoutY="212.0" prefWidth="150.0" promptText="Pick a Type" />
-                  <Label layoutX="218.0" layoutY="252.0" text="Number of appointments:" />
-                  <Label fx:id="lblCount" layoutX="372.0" layoutY="252.0" text="0" />
+                  <ComboBox fx:id="cboCounterMonth" layoutX="211.0" layoutY="175.0" prefHeight="25.0" prefWidth="187.0" promptText="Month" />
+                  <ComboBox fx:id="cboCounterType" layoutX="211.0" layoutY="212.0" prefHeight="25.0" prefWidth="187.0" promptText="Pick a Type" />
                   <Label layoutX="572.0" layoutY="27.0" text="Reports">
                      <font>
                         <Font size="40.0" />
@@ -127,8 +125,8 @@
                      </font>
                   </Label>
                   <ComboBox fx:id="cboLengthType" layoutX="889.0" layoutY="175.0" prefWidth="150.0" promptText="Pick a Type" />
-                  <Label layoutX="852.0" layoutY="216.0" text="Average Appointment Length:" />
-                  <Label fx:id="lblAverageLength" layoutX="1024.0" layoutY="216.0" text="0 Minutes" />
+                  <Button disable="true" layoutX="241.0" layoutY="249.0" mnemonicParsing="false" text="Count Appointments" />
+                  <Button fx:id="btnAverageLength" disable="true" layoutX="889.0" layoutY="212.0" mnemonicParsing="false" text="Calculate Average Length" />
                </children>
             </AnchorPane>
         </content>

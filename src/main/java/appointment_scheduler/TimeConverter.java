@@ -24,6 +24,8 @@ public abstract class TimeConverter {
 
     public static DateTimeFormatter fullFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy h:mm a");
 
+    public static DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+
     public static ZonedDateTime convertToLocal(ZonedDateTime time){
         return time.withZoneSameInstant(ZoneId.systemDefault());
     }
