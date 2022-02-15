@@ -106,7 +106,7 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="cboContactSchedule" layoutX="507.0" layoutY="404.0" prefHeight="25.0" prefWidth="267.0" promptText="Choose a Contact to View Their Schedule" />
+                  <ComboBox fx:id="cboContactSchedule" onAction="#filterContactSchedule" layoutX="507.0" layoutY="404.0" prefHeight="25.0" prefWidth="267.0" promptText="Choose a Contact to View Their Schedule" />
                   <Label layoutX="206.0" layoutY="132.0" text="Appointment Counter">
                      <font>
                         <Font size="20.0" />

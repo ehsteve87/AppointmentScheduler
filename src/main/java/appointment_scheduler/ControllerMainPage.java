@@ -232,6 +232,15 @@ public class ControllerMainPage {
         colCustLastUpdate.setCellValueFactory(new PropertyValueFactory<>("lastUpdateString"));
         colCustUpdatedBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedByString"));
 
+        tblContactSchedule.setItems(DatabaseLists.getApptList());
+        colScheduleApptId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colScheduleStart.setCellValueFactory(new PropertyValueFactory<>("startTimeString"));
+        colScheduleEnd.setCellValueFactory(new PropertyValueFactory<>("endTimeString"));
+        colScheduleTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        colScheduleType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        colScheduleDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        colScheduleCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+
     }
 
     @FXML
@@ -272,9 +281,6 @@ public class ControllerMainPage {
 
     @FXML
     private ComboBox<String> cboSearchCustomers;
-
-    @FXML
-    private CheckBox ckbxPastAppointments;
 
     @FXML
     private TableColumn<Appointment, String> colApptContact;
@@ -340,25 +346,25 @@ public class ControllerMainPage {
     private TableColumn<Customer, String> colCustUpdatedBy;
 
     @FXML
-    private TableColumn<?, ?> colScheduleCustomerId;
+    private TableColumn<Appointment, Integer> colScheduleCustomerId;
 
     @FXML
-    private TableColumn<?, ?> colScheduleApptId;
+    private TableColumn<Appointment, Integer> colScheduleApptId;
 
     @FXML
-    private TableColumn<?, ?> colScheduleDescription;
+    private TableColumn<Appointment, String> colScheduleDescription;
 
     @FXML
-    private TableColumn<?, ?> colScheduleEnd;
+    private TableColumn<Appointment, String> colScheduleEnd;
 
     @FXML
-    private TableColumn<?, ?> colScheduleStart;
+    private TableColumn<Appointment, String> colScheduleStart;
 
     @FXML
-    private TableColumn<?, ?> colScheduleTitle;
+    private TableColumn<Appointment, String> colScheduleTitle;
 
     @FXML
-    private TableColumn<?, ?> colScheduleType;
+    private TableColumn<Appointment, String> colScheduleType;
 
     @FXML
     private Label lblAverageLength;
@@ -385,7 +391,7 @@ public class ControllerMainPage {
     private TableView<Appointment> tblAppointments;
 
     @FXML
-    private TableView<?> tblContactSchedule;
+    private TableView<Appointment> tblContactSchedule;
 
     @FXML
     private TextField tfSearchAppointments;
@@ -396,10 +402,11 @@ public class ControllerMainPage {
     @FXML
     private ToggleGroup timeFilter;
 
-
+    //lambda
     @FXML
-    private void appointmentSearchCombo(ActionEvent event) {
-
+    private void filterContactSchedule(ActionEvent event) {
+        tblContactSchedule.setItems(new FilteredList<>(DatabaseLists.getApptList(),
+                                        a -> a.getContactName().equals(cboContactSchedule.getValue())));
     }
 
 
