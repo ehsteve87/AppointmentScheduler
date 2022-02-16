@@ -26,5 +26,11 @@ public class User {
         return username;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public static void setLoggedInUser(User loggedInUser) {
+        User.loggedInUser = loggedInUser;
+    }
 }
