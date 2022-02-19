@@ -30,6 +30,12 @@ public abstract class TimeConverter {
         return time.withZoneSameInstant(ZoneId.systemDefault());
     }
 
+    public static ZonedDateTime localToUtc(LocalDateTime ldt){
+        ZonedDateTime zdt = ZonedDateTime.of(ldt, ZoneId.systemDefault());
+        ZonedDateTime utcTime = zdt.withZoneSameInstant(utcZone);
+        return utcTime;
+    }
+
     public static ZonedDateTime getNowInUtc(){
         LocalDateTime rightNow = LocalDateTime.now();
         ZonedDateTime zonedNow = ZonedDateTime.of(rightNow, ZoneId.systemDefault());

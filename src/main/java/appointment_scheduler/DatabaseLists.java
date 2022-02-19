@@ -6,7 +6,7 @@ import javafx.collections.ObservableList;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-public class DatabaseLists {
+public abstract class DatabaseLists {
 
     private static ObservableList<Customer> customerList = FXCollections.observableArrayList();
     private static ObservableList<User> userList = FXCollections.observableArrayList();

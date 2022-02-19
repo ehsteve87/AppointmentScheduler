@@ -1,5 +1,7 @@
 package appointment_scheduler;
 
+import java.util.ArrayList;
+
 public class Customer extends Updatable{
     private int id;
     private String name;
@@ -9,6 +11,7 @@ public class Customer extends Updatable{
     private int divisionId;
     private String divisionString;
     private String countryString;
+    private ArrayList<Appointment> appointments = new ArrayList<>();
 
 
     public Customer(int id, String name, String address, String postalCode, String phone, int divisionId, String divisionString, String countryString) {
@@ -65,6 +68,9 @@ public class Customer extends Updatable{
         return countryString;
     }
 
+    public ArrayList<Appointment> getAppointments() {
+        return appointments;
+    }
 
     public void setName(String name) {
         this.name = name;

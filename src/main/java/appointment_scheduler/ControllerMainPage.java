@@ -192,6 +192,11 @@ public class ControllerMainPage {
         //lambda
         DatabaseLists.getContactList().forEach(c -> cboContactSchedule.getItems().add(c.getName()));
 
+        //populate individual customer appointment lists
+        DatabaseLists.getCustomerList().forEach(c -> c.getAppointments().clear());
+        DatabaseLists.getApptList().forEach(a -> DatabaseLists.findByProperty(DatabaseLists.getCustomerList(), c -> c.getId() == a.getCustomerId())
+                                                            .getAppointments().add(a));
+
 
         //populate type combo boxes on reports tab
         cboCounterType.getItems().clear();
