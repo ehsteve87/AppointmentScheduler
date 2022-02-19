@@ -112,8 +112,8 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="cboCounterMonth" layoutX="211.0" layoutY="175.0" prefHeight="25.0" prefWidth="187.0" promptText="Month" />
-                  <ComboBox fx:id="cboCounterType" layoutX="211.0" layoutY="212.0" prefHeight="25.0" prefWidth="187.0" promptText="Pick a Type" />
+                  <ComboBox fx:id="cboCounterMonth" layoutX="211.0" layoutY="175.0" onAction="#enableCountApptsButton" prefHeight="25.0" prefWidth="187.0" promptText="Month" />
+                  <ComboBox fx:id="cboCounterType" layoutX="211.0" layoutY="212.0" onAction="#enableCountApptsButton" prefHeight="25.0" prefWidth="187.0" promptText="Pick a Type" />
                   <Label layoutX="572.0" layoutY="27.0" text="Reports">
                      <font>
                         <Font size="40.0" />
@@ -124,9 +124,9 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="cboLengthType" layoutX="889.0" layoutY="175.0" prefWidth="150.0" promptText="Pick a Type" />
-                  <Button disable="true" layoutX="241.0" layoutY="249.0" mnemonicParsing="false" text="Count Appointments" />
-                  <Button fx:id="btnAverageLength" disable="true" layoutX="889.0" layoutY="212.0" mnemonicParsing="false" text="Calculate Average Length" />
+                  <ComboBox fx:id="cboLengthType" layoutX="889.0" layoutY="175.0" onAction="#enableAverageLengthButton" prefWidth="150.0" promptText="Pick a Type" />
+                  <Button fx:id="btnCountAppts" disable="true" layoutX="241.0" layoutY="249.0" mnemonicParsing="false" onAction="#countAppointmentsByMonth" text="Count Appointments" />
+                  <Button fx:id="btnAverageLength" disable="true" layoutX="889.0" layoutY="212.0" mnemonicParsing="false" onAction="#calculateAverageAppointmentLength" text="Calculate Average Length" />
                </children>
             </AnchorPane>
         </content>

@@ -30,7 +30,7 @@
             <TextField fx:id="tfUsername" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <Label fx:id="lblPassword" text="Password" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
             <PasswordField fx:id="pfPassword" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-            <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#loginButton" text="Login" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+            <Button fx:id="btnLogin" defaultButton="true" mnemonicParsing="false" onAction="#loginButton" text="Login" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
          </children>
       </GridPane>
       <GridPane layoutX="337.0" layoutY="91.0" prefHeight="88.0" prefWidth="608.0">

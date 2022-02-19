@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -422,6 +424,12 @@ public class ControllerMainPage {
     @FXML
     private ToggleGroup timeFilter;
 
+    @FXML
+    private Button btnAverageLength;
+
+    @FXML
+    private Button btnCountAppts;
+
     //lambda
     @FXML
     private void filterContactSchedule(ActionEvent event) {
@@ -513,6 +521,101 @@ public class ControllerMainPage {
         newWindow.initModality(Modality.WINDOW_MODAL);
         newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
         newWindow.show();
+    }
+
+    @FXML
+    private void enableAverageLengthButton(ActionEvent event){
+        if(cboLengthType.getValue() != null){
+            btnAverageLength.setDisable(false);
+        }
+    }
+
+    @FXML
+    private void enableCountApptsButton(ActionEvent event){
+        if(cboCounterMonth.getValue() != null && cboCounterType.getValue() != null){
+            btnCountAppts.setDisable(false);
+        }
+    }
+
+    @FXML
+    private void calculateAverageAppointmentLength(ActionEvent event){
+        String typeValue = cboLengthType.getValue();
+        int counter = 0;
+        int lengths = 0;
+        if(typeValue == "All Types") {
+            try (var ps = JDBC.conn.prepareStatement("SELECT Start, End FROM appointments;");
+                 var rs = ps.executeQuery()) {
+                while(rs.next()){
+                    counter++;
+                    LocalDateTime from = rs.getTimestamp("Start").toLocalDateTime();
+                    LocalDateTime to = rs.getTimestamp("End").toLocalDateTime();
+                    Duration duration = Duration.between(from, to);
+                    lengths += duration.toMinutes();
+                }
+
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        } else {
+            try (var ps = JDBC.conn.prepareStatement("SELECT Start, End FROM appointments WHERE Type = ?;")){
+                ps.setString(1, typeValue);
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                    counter++;
+                    LocalDateTime from = rs.getTimestamp("Start").toLocalDateTime();
+                    LocalDateTime to = rs.getTimestamp("End").toLocalDateTime();
+                    Duration duration = Duration.between(from, to);
+                    lengths += duration.toMinutes();
+                }
+
+            } catch (SQLException e){
+                System.out.println(e);
+            }
+        }
+        int average = lengths/counter;
+
+        Alert report = new Alert(Alert.AlertType.INFORMATION);
+        report.setTitle("Report");
+        report.setHeaderText("Average length of appointment type: " + typeValue);
+        report.setContentText(String.valueOf(average) + " minutes");
+        report.showAndWait();
+    }
+
+    @FXML
+    private void countAppointmentsByMonth(ActionEvent event){
+        String monthString = cboCounterMonth.getValue();
+        String selectedType = cboCounterType.getValue();
+        int finalCount = 0;
+        if(!selectedType.equals("All Types")) {
+            try (var ps = JDBC.conn.prepareStatement("SELECT count(Appointment_ID) as count FROM appointments WHERE date_format(Start, \"%M %Y\") = ? AND Type = ?")) {
+                ps.setString(1, monthString);
+                ps.setString(2, selectedType);
+                ResultSet rs = ps.executeQuery();
+                rs.next();
+                finalCount = rs.getInt("count");
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+            Alert report = new Alert(Alert.AlertType.INFORMATION);
+            report.setTitle("Report");
+            report.setHeaderText("Total " + selectedType + " appointments in " + monthString + ":");
+            report.setContentText(String.valueOf(finalCount));
+            report.showAndWait();
+        } else {
+            try (var ps = JDBC.conn.prepareStatement("SELECT count(Appointment_ID) as count FROM appointments WHERE date_format(Start, \"%M %Y\") = ?")) {
+                ps.setString(1, monthString);
+                ResultSet rs = ps.executeQuery();
+                rs.next();
+                finalCount = rs.getInt("count");
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+            Alert report = new Alert(Alert.AlertType.INFORMATION);
+            report.setTitle("Report");
+            report.setHeaderText("Total appointments in " + monthString + ":");
+            report.setContentText(String.valueOf(finalCount));
+            report.showAndWait();
+        }
     }
 
 }

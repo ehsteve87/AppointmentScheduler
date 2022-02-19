@@ -60,7 +60,7 @@ public class ControllerNewAppointment {
     private TextField tfApptId;
 
     @FXML
-    private TextField tfCustomerId;
+    private ComboBox<Integer> cboCustomerId;
 
     @FXML
     private TextField tfDescription;
@@ -72,7 +72,7 @@ public class ControllerNewAppointment {
     private TextField tfTitle;
 
     @FXML
-    private TextField tfUserId;
+    private ComboBox<Integer> cboUserId;
 
     @FXML
     void cancelButtonNewAppointment(ActionEvent event) {

@@ -50,9 +50,9 @@
             <TextField fx:id="tfDescription" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="tfLocation" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <ComboBox fx:id="cboContact" prefHeight="25.0" prefWidth="219.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <ComboBox fx:id="cboType" prefHeight="25.0" prefWidth="218.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <DatePicker fx:id="dpEndDate" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label text="End Date" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <TextField fx:id="tfType" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
       <Label layoutX="113.0" layoutY="34.0" text="Update Appointment">
