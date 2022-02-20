@@ -12,6 +12,7 @@ public class Customer extends Updatable{
     private String divisionString;
     private String countryString;
     private ArrayList<Appointment> appointments = new ArrayList<>();
+    private static Customer customerToUpdate;
 
 
     public Customer(int id, String name, String address, String postalCode, String phone, int divisionId, String divisionString, String countryString) {
@@ -72,6 +73,10 @@ public class Customer extends Updatable{
         return appointments;
     }
 
+    public static Customer getCustomerToUpdate() {
+        return customerToUpdate;
+    }
+
     public void setName(String name) {
         this.name = name;
         update();
@@ -109,4 +114,7 @@ public class Customer extends Updatable{
         this.countryString = countryString;
     }
 
+    public static void setCustomerToUpdate(Customer customerToUpdate) {
+        Customer.customerToUpdate = customerToUpdate;
+    }
 }

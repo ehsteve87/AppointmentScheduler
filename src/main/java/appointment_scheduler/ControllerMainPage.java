@@ -244,6 +244,7 @@ public class ControllerMainPage {
         colApptEnd.setCellValueFactory(new PropertyValueFactory<>("endTimeString"));
         colApptCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         colApptUserId.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        tblAppointments.sort();
 
         //populate customers table
         tblCustomers.setItems(DatabaseLists.getCustomerList());
@@ -258,6 +259,7 @@ public class ControllerMainPage {
         colCustCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdByString"));
         colCustLastUpdate.setCellValueFactory(new PropertyValueFactory<>("lastUpdateString"));
         colCustUpdatedBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedByString"));
+        tblCustomers.sort();
 
         //populate contact schedule table
         tblContactSchedule.setItems(DatabaseLists.getApptList());
@@ -268,6 +270,7 @@ public class ControllerMainPage {
         colScheduleType.setCellValueFactory(new PropertyValueFactory<>("type"));
         colScheduleDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colScheduleCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        tblContactSchedule.sort();
 
     }
 
@@ -446,9 +449,18 @@ public class ControllerMainPage {
                                         a -> a.getContactName().equals(cboContactSchedule.getValue())));
     }
 
-
     @FXML
     private void deleteAppointmentButton(ActionEvent event) {
+        Appointment selectedAppt = tblAppointments.getSelectionModel().getSelectedItem();
+        if(selectedAppt != null){
+            String sql = "DELETE FROM appointments WHERE Appointment_ID=" + selectedAppt.getId() + ";";
+            try(var ps = JDBC.conn.prepareStatement(sql)){
+                ps.executeUpdate();
+                initialize();
+            } catch (SQLException e){
+                System.out.println(e);
+            }
+        }
 
     }
 
@@ -466,7 +478,7 @@ public class ControllerMainPage {
         newWindow.setScene(newAppointmentPage);
         newWindow.initModality(Modality.WINDOW_MODAL);
         newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
-        newWindow.setOnCloseRequest(new EventHandler<WindowEvent>() {
+        newWindow.setOnHidden(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 initialize();
             }
@@ -483,7 +495,7 @@ public class ControllerMainPage {
         newWindow.setScene(newCustomerPage);
         newWindow.initModality(Modality.WINDOW_MODAL);
         newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
-        newWindow.setOnCloseRequest(new EventHandler<WindowEvent>() {
+        newWindow.setOnHidden(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 initialize();
             }
@@ -493,7 +505,14 @@ public class ControllerMainPage {
 
     @FXML
     private void createApptForCustomerButton(ActionEvent event) throws IOException {
-        newAppointmentButton(event);
+        if(tblCustomers.getSelectionModel().getSelectedItem() == null){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("No customer selected.");
+            alert.showAndWait();
+        } else {
+            Customer.setCustomerToUpdate(tblCustomers.getSelectionModel().getSelectedItem());
+            newAppointmentButton(event);
+        }
     }
 
     //lambda
@@ -519,15 +538,31 @@ public class ControllerMainPage {
     }
 
     @FXML
-    private void updateAppointmentButton(ActionEvent event) throws IOException {
+    private void openModal(String fxml, String windowTitle, ActionEvent event) throws IOException {
         Stage newWindow = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("updateAppointment.fxml"));
-        Scene updateAppointmentPage = new Scene(fxmlLoader.load(), 600,400);
-        newWindow.setTitle("Update Appointment");
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml));
+        Scene updateAppointmentPage = new Scene(fxmlLoader.load(), 600, 400);
+        newWindow.setTitle(windowTitle);
         newWindow.setScene(updateAppointmentPage);
         newWindow.initModality(Modality.WINDOW_MODAL);
         newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
+        newWindow.setOnHidden(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                initialize();
+            }
+        });
         newWindow.show();
+    }
+
+    @FXML
+    private void updateAppointmentButton(ActionEvent event) throws IOException {
+        if(tblAppointments.getSelectionModel().getSelectedItem() == null){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("No appointment selected.");
+        } else {
+            Appointment.setApptToUpdate(tblAppointments.getSelectionModel().getSelectedItem());
+            openModal("updateAppointment.fxml", "Update Appointment", event);
+        }
     }
 
     @FXML
@@ -539,6 +574,11 @@ public class ControllerMainPage {
         newWindow.setScene(updateCustomerPage);
         newWindow.initModality(Modality.WINDOW_MODAL);
         newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
+        newWindow.setOnHidden(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                initialize();
+            }
+        });
         newWindow.show();
     }
 

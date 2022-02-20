@@ -44,6 +44,12 @@ public class ControllerNewAppointment {
         cboCustomerId.getItems().clear();
         //lambda
         DatabaseLists.getCustomerList().forEach(c -> cboCustomerId.getItems().add(c.getId()));
+        if(Customer.getCustomerToUpdate() != null){
+            cboCustomerId.setValue(Customer.getCustomerToUpdate().getId());
+            cboCustomerId.setDisable(true);
+            Customer.setCustomerToUpdate(null);
+
+        }
 
         //populate UserId combo box
         cboUserId.getItems().clear();
@@ -147,17 +153,19 @@ public class ControllerNewAppointment {
             ZonedDateTime endInUtc = TimeConverter.localToUtc(endTime);
             //lambda
             Customer customer = DatabaseLists.findByProperty(DatabaseLists.getCustomerList(),c -> c.getId() == customerId);
-            for(Appointment appt : customer.getAppointments()){
-                System.out.println("startInUtc: " + startInUtc);
-                System.out.println("appt.getStartTime(): " + appt.getStartTime());
-                if((startInUtc.isAfter(appt.getStartTime()) || startInUtc.isEqual(appt.getStartTime())) && startInUtc.isBefore(appt.getEndTime())){
+            for(Appointment appt : customer.getAppointments()) {
+                if ((startInUtc.isAfter(appt.getStartTime()) || startInUtc.isEqual(appt.getStartTime())) && startInUtc.isBefore(appt.getEndTime())) {
                     problems.append("Customer already has an appointment scheduled for this time.");
                     break;
                 }
-                if((endInUtc.isBefore(appt.getEndTime()) || endInUtc.isEqual(appt.getEndTime())) && endInUtc.isAfter(appt.getStartTime())){
+                if ((endInUtc.isBefore(appt.getEndTime()) || endInUtc.isEqual(appt.getEndTime())) && endInUtc.isAfter(appt.getStartTime())) {
                     problems.append("Customer already has an appointment scheduled for this time.");
                     break;
                 }
+            }
+            if(startTime.isBefore(LocalDateTime.now())){
+                System.out.println("got here!");
+                problems.append("Start time cannot be before current time.\n");
             }
         }
         if(!problems.isEmpty()){
@@ -185,8 +193,8 @@ public class ControllerNewAppointment {
                 ps.setInt(7, customerId);
                 ps.setInt(8, userId);
                 ps.setInt(9, contact.getId());
-                System.out.println(ps.toString());
                 ps.executeUpdate();
+                cancelButtonNewAppointment(event);
 
             } catch (SQLException e){
                 System.out.println(e);

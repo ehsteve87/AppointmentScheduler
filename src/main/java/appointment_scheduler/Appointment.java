@@ -17,6 +17,7 @@ public class Appointment extends Updatable{
     private String startTimeString;
     private String endTimeString;
     private String contactName;
+    private static Appointment apptToUpdate;
 
 
 
@@ -103,6 +104,14 @@ public class Appointment extends Updatable{
 
     public String getContactName() {
         return contactName;
+    }
+
+    public static Appointment getApptToUpdate() {
+        return apptToUpdate;
+    }
+
+    public static void setApptToUpdate(Appointment apptToUpdate) {
+        Appointment.apptToUpdate = apptToUpdate;
     }
 
     public void setTitle(String title) {
