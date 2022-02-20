@@ -148,6 +148,8 @@ public class ControllerNewAppointment {
             //lambda
             Customer customer = DatabaseLists.findByProperty(DatabaseLists.getCustomerList(),c -> c.getId() == customerId);
             for(Appointment appt : customer.getAppointments()){
+                System.out.println("startInUtc: " + startInUtc);
+                System.out.println("appt.getStartTime(): " + appt.getStartTime());
                 if((startInUtc.isAfter(appt.getStartTime()) || startInUtc.isEqual(appt.getStartTime())) && startInUtc.isBefore(appt.getEndTime())){
                     problems.append("Customer already has an appointment scheduled for this time.");
                     break;
@@ -166,9 +168,9 @@ public class ControllerNewAppointment {
         } else {
             String sql = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID)\n" +
                     "VALUES(?, ?, ?, ?, ?, ?, '" +
-                    Timestamp.valueOf(TimeConverter.getNowInUtc().toLocalDateTime()) + "', '" +
+                    Timestamp.valueOf(TimeConverter.getNowInUtc().toLocalDateTime()).toString() + "', '" +
                     User.getLoggedInUser().getUsername() + "', '" +
-                    Timestamp.valueOf(TimeConverter.getNowInUtc().toLocalDateTime()) + "', '" +
+                    Timestamp.valueOf(TimeConverter.getNowInUtc().toLocalDateTime()).toString() + "', '" +
                     User.getLoggedInUser().getUsername() +
                     "', ?, ?, ?);";
             try(var ps = JDBC.conn.prepareStatement(sql)){
@@ -178,8 +180,8 @@ public class ControllerNewAppointment {
                 ps.setString(2,description);
                 ps.setString(3, location);
                 ps.setString(4, type);
-                ps.setTimestamp(5,Timestamp.valueOf(startTime.toLocalDateTime()));
-                ps.setTimestamp(6, Timestamp.valueOf(endTime.toLocalDateTime()));
+                ps.setString(5,Timestamp.valueOf(startTime.toLocalDateTime()).toString());
+                ps.setString(6, Timestamp.valueOf(endTime.toLocalDateTime()).toString());
                 ps.setInt(7, customerId);
                 ps.setInt(8, userId);
                 ps.setInt(9, contact.getId());
