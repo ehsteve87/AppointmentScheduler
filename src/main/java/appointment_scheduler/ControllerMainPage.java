@@ -200,6 +200,7 @@ public class ControllerMainPage {
         DatabaseLists.getCustomerList().forEach(c -> c.getAppointments().clear());
         DatabaseLists.getApptList().forEach(a -> DatabaseLists.findByProperty(DatabaseLists.getCustomerList(), c -> c.getId() == a.getCustomerId())
                                                             .getAppointments().add(a));
+        resetPromptText(cboContactSchedule, "Select a Contact to view their schedule");
 
 
         //populate type combo boxes on reports tab
@@ -218,6 +219,8 @@ public class ControllerMainPage {
         types.forEach(t -> cboCounterType.getItems().add(t));
         //LAMBDA
         types.forEach(t -> cboLengthType.getItems().add(t));
+        resetPromptText(cboCounterType, "Pick a Type");
+        resetPromptText(cboLengthType, "Pick a Type");
 
         //Populate months combo box on reports page
         cboCounterMonth.getItems().clear();
@@ -229,6 +232,7 @@ public class ControllerMainPage {
         }
         Collections.sort(monthsList);
         monthsList.forEach(m -> cboCounterMonth.getItems().add(m.format(TimeConverter.monthFormatter)));
+        resetPromptText(cboCounterMonth, "Pick a Month");
 
 
 
@@ -442,6 +446,23 @@ public class ControllerMainPage {
 
     @FXML
     private Button btnCountAppts;
+
+    //this method fixes a feature/bug of javafx where the combo box prompt goes away if you reinitialize a form while a value is selected.
+    @FXML
+    private void resetPromptText(ComboBox cbo, String prompt) {
+        cbo.setPromptText(prompt);
+        cbo.setButtonCell(new ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(prompt);
+                } else {
+                    setText(item);
+                }
+            }
+        });
+    }
 
     //lambda
     @FXML
