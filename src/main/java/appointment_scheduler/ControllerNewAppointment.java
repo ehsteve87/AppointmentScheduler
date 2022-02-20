@@ -110,16 +110,6 @@ public class ControllerNewAppointment {
     private ComboBox<Integer> cboUserId;
 
     @FXML
-    private void pickedStartDate(ActionEvent event){
-
-    }
-
-    @FXML
-    private void pickedEndDate(ActionEvent event){
-
-    }
-
-    @FXML
     void cancelButtonNewAppointment(ActionEvent event) {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
@@ -200,10 +190,6 @@ public class ControllerNewAppointment {
                 System.out.println(e);
             }
         }
-
-
-
-
 
     }
 

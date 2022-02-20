@@ -38,21 +38,21 @@
             <Label text="Start Date" GridPane.columnIndex="2" />
             <Label text="Start Time" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label text="End Time" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label text="End Date" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <Label text="Customer ID" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Label text="User ID" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-            <DatePicker fx:id="dpStartDate" GridPane.columnIndex="3" />
-            <ComboBox fx:id="cboStartTime" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <ComboBox fx:id="cboEndTime" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <TextField fx:id="tfCustomerId" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-            <TextField fx:id="tfUserId" GridPane.columnIndex="3" GridPane.rowIndex="5" />
             <TextField fx:id="tfApptId" disable="true" GridPane.columnIndex="1" />
             <TextField fx:id="tfTitle" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="tfDescription" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="tfLocation" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ComboBox fx:id="cboContact" prefHeight="25.0" prefWidth="219.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <DatePicker fx:id="dpEndDate" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <Label text="End Date" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <TextField fx:id="tfType" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="cboContact" prefHeight="25.0" prefWidth="219.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <DatePicker fx:id="dpStartDate" GridPane.columnIndex="3" />
+            <ComboBox fx:id="cboStartTime" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <DatePicker fx:id="dpEndDate" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <ComboBox fx:id="cboEndTime" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <ComboBox fx:id="cboCustomerId" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <ComboBox fx:id="cboUserId" GridPane.columnIndex="3" GridPane.rowIndex="5" />
          </children>
       </GridPane>
       <Label layoutX="113.0" layoutY="34.0" text="Update Appointment">

@@ -54,7 +54,7 @@ public class ControllerMainPage {
             System.out.println(e);
         }
 
-        //Create any users that should exist but don't
+        //Create any users that should exist but don't.
         ArrayList<String> pu = new ArrayList<>();
         ArrayList<String> cu = new ArrayList<>();
         for(String x : possibleUsers){
@@ -220,6 +220,7 @@ public class ControllerMainPage {
         types.forEach(t -> cboLengthType.getItems().add(t));
 
         //Populate months combo box on reports page
+        cboCounterMonth.getItems().clear();
         HashSet<YearMonth> months = new HashSet<>();
         DatabaseLists.getApptList().forEach(a -> months.add(YearMonth.from(a.getStartTime())));
         ArrayList<YearMonth> monthsList = new ArrayList();
@@ -471,36 +472,12 @@ public class ControllerMainPage {
 
     @FXML
     private void newAppointmentButton(ActionEvent event) throws IOException {
-        Stage newWindow = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("newAppointment.fxml"));
-        Scene newAppointmentPage = new Scene(fxmlLoader.load(), 600,400);
-        newWindow.setTitle("New Appointment");
-        newWindow.setScene(newAppointmentPage);
-        newWindow.initModality(Modality.WINDOW_MODAL);
-        newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
-        newWindow.setOnHidden(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                initialize();
-            }
-        });
-        newWindow.show();
+        openModal("NewAppointment.fxml", "New Appointment", event);
     }
 
     @FXML
     private void newCustomerButton(ActionEvent event) throws IOException {
-        Stage newWindow = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("newCustomer.fxml"));
-        Scene newCustomerPage = new Scene(fxmlLoader.load(), 600,400);
-        newWindow.setTitle("New Customer");
-        newWindow.setScene(newCustomerPage);
-        newWindow.initModality(Modality.WINDOW_MODAL);
-        newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
-        newWindow.setOnHidden(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                initialize();
-            }
-        });
-        newWindow.show();
+        openModal("newCustomer.fxml", "New Customer", event);
     }
 
     @FXML
@@ -519,8 +496,7 @@ public class ControllerMainPage {
     @FXML
     private void thisMonthRadioButton(ActionEvent event) {
         tblAppointments.setItems(new FilteredList<>(DatabaseLists.getApptList(),
-                a -> a.getStartTime().isAfter(TimeConverter.getNowInUtc())
-                        && a.getStartTime().isBefore(TimeConverter.getNowInUtc().plusMonths(1))));
+                a -> (a.getStartTime().getMonth() == LocalDateTime.now().getMonth()) && a.getStartTime().getYear() == LocalDateTime.now().getYear()));
     }
 
     //lambda
@@ -567,19 +543,7 @@ public class ControllerMainPage {
 
     @FXML
     private void updateCustomerButton(ActionEvent event) throws IOException {
-        Stage newWindow = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("updateCustomer.fxml"));
-        Scene updateCustomerPage = new Scene(fxmlLoader.load(), 600,400);
-        newWindow.setTitle("Update Customer");
-        newWindow.setScene(updateCustomerPage);
-        newWindow.initModality(Modality.WINDOW_MODAL);
-        newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
-        newWindow.setOnHidden(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                initialize();
-            }
-        });
-        newWindow.show();
+        openModal("updateCustomer.fxml", "Update Customer", event);
     }
 
     @FXML
