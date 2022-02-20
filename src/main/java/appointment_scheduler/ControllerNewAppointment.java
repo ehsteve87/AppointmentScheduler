@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -145,13 +147,48 @@ public class ControllerNewAppointment {
             ZonedDateTime endInUtc = TimeConverter.localToUtc(endTime);
             //lambda
             Customer customer = DatabaseLists.findByProperty(DatabaseLists.getCustomerList(),c -> c.getId() == customerId);
-            System.out.println(customer.getName());
+            for(Appointment appt : customer.getAppointments()){
+                if((startInUtc.isAfter(appt.getStartTime()) || startInUtc.isEqual(appt.getStartTime())) && startInUtc.isBefore(appt.getEndTime())){
+                    problems.append("Customer already has an appointment scheduled for this time.");
+                    break;
+                }
+                if((endInUtc.isBefore(appt.getEndTime()) || endInUtc.isEqual(appt.getEndTime())) && endInUtc.isAfter(appt.getStartTime())){
+                    problems.append("Customer already has an appointment scheduled for this time.");
+                    break;
+                }
+            }
         }
         if(!problems.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setHeaderText("The following problems were found");
             alert.setContentText(problems.toString());
             alert.showAndWait();
+        } else {
+            String sql = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID)\n" +
+                    "VALUES(?, ?, ?, ?, ?, ?, '" +
+                    Timestamp.valueOf(TimeConverter.getNowInUtc().toLocalDateTime()) + "', '" +
+                    User.getLoggedInUser().getUsername() + "', '" +
+                    Timestamp.valueOf(TimeConverter.getNowInUtc().toLocalDateTime()) + "', '" +
+                    User.getLoggedInUser().getUsername() +
+                    "', ?, ?, ?);";
+            try(var ps = JDBC.conn.prepareStatement(sql)){
+                ZonedDateTime startTime = TimeConverter.localToUtc(LocalDateTime.of(startDate, LocalTime.parse(startTimeString, DateTimeFormatter.ofPattern("h:mm a"))));
+                ZonedDateTime endTime = TimeConverter.localToUtc(LocalDateTime.of(endDate, LocalTime.parse(endTimeString, DateTimeFormatter.ofPattern("h:mm a"))));
+                ps.setString(1,title);
+                ps.setString(2,description);
+                ps.setString(3, location);
+                ps.setString(4, type);
+                ps.setTimestamp(5,Timestamp.valueOf(startTime.toLocalDateTime()));
+                ps.setTimestamp(6, Timestamp.valueOf(endTime.toLocalDateTime()));
+                ps.setInt(7, customerId);
+                ps.setInt(8, userId);
+                ps.setInt(9, contact.getId());
+                System.out.println(ps.toString());
+                ps.executeUpdate();
+
+            } catch (SQLException e){
+                System.out.println(e);
+            }
         }
 
 

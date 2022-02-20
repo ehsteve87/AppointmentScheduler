@@ -2,6 +2,7 @@ package appointment_scheduler;
 
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -10,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -29,8 +31,8 @@ public class ControllerMainPage {
         //Create Set of all possible users
         Set<String> possibleUsers = new HashSet<>();
         String[] tables = {"appointments", "countries", "customers", "first_level_divisions", "users"};
-        for(int i = 0; i < tables.length; i++) {
-            try (PreparedStatement ps = JDBC.conn.prepareStatement("SELECT Created_By, Last_Updated_By FROM " + tables[i] + ";");
+        for (String table : tables) {
+            try (PreparedStatement ps = JDBC.conn.prepareStatement("SELECT Created_By, Last_Updated_By FROM " + table + ";");
                  ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     possibleUsers.add(rs.getString("Created_By"));
@@ -135,6 +137,7 @@ public class ControllerMainPage {
         }
 
         //load Customers from database
+        DatabaseLists.getCustomerList().clear();
         String customerQuery = "SELECT c.Customer_ID, c.Customer_Name, c.Address, c.Postal_Code, c.Phone, \n" +
                 "c.Create_Date, c.Created_By, c.Last_Update, c.Last_Updated_By, c.Division_ID,\n" +
                 "d.Division, countries.Country\n" +
@@ -172,6 +175,7 @@ public class ControllerMainPage {
         }
 
         //Load contacts from database
+        DatabaseLists.getContactList().clear();
         String contactQuery = "SELECT * FROM contacts;";
         try(PreparedStatement ps = JDBC.conn.prepareStatement(contactQuery);
             ResultSet rs = ps.executeQuery()){
@@ -462,6 +466,11 @@ public class ControllerMainPage {
         newWindow.setScene(newAppointmentPage);
         newWindow.initModality(Modality.WINDOW_MODAL);
         newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
+        newWindow.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                initialize();
+            }
+        });
         newWindow.show();
     }
 
@@ -474,6 +483,11 @@ public class ControllerMainPage {
         newWindow.setScene(newCustomerPage);
         newWindow.initModality(Modality.WINDOW_MODAL);
         newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
+        newWindow.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                initialize();
+            }
+        });
         newWindow.show();
     }
 
