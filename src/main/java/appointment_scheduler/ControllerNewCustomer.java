@@ -57,6 +57,18 @@ public class ControllerNewCustomer {
 
     @FXML
     private void saveButtonNewCustomer(ActionEvent event) {
+        String name = tfName.getText().trim();
+        String address = tfName.getText().trim();
+        String postal = tfPostal.getText().trim();
+        Country country = cboCountry.getValue();
+        Division division = cboDivision.getValue();
+        String phone = tfPhone.getText().trim();
+
+        StringBuilder problems = new StringBuilder();
+        if(name.equals("") || address.equals("") || postal.equals("") || country.equals("") || country == null || division == null || phone.equals("")){
+            problems.append("Blank fields are not allowed");
+        }
+
 
     }
 

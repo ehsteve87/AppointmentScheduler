@@ -41,20 +41,20 @@ public class ControllerNewAppointment {
         DatabaseLists.getContactList().forEach(c -> cboContact.getItems().add(c));
 
         //populate customerId combo box
-        cboCustomerId.getItems().clear();
+        cboCustomer.getItems().clear();
         //lambda
-        DatabaseLists.getCustomerList().forEach(c -> cboCustomerId.getItems().add(c.getId()));
-        if(Customer.getCustomerToUpdate() != null){
-            cboCustomerId.setValue(Customer.getCustomerToUpdate().getId());
-            cboCustomerId.setDisable(true);
+        DatabaseLists.getCustomerList().forEach(c -> cboCustomer.getItems().add(c));
+        if(Customer.getCustomerForNewAppointment() != null){
+            cboCustomer.setValue(Customer.getCustomerForNewAppointment());
+            cboCustomer.setDisable(true);
             Customer.setCustomerToUpdate(null);
 
         }
 
         //populate UserId combo box
-        cboUserId.getItems().clear();
+        cboUser.getItems().clear();
         //lambda
-        DatabaseLists.getUserList().forEach(u -> cboUserId.getItems().add(u.getId()));
+        DatabaseLists.getUserList().forEach(u -> cboUser.getItems().add(u));
 
         //populate startTime combo box
         cboStartTime.getItems().clear();
@@ -95,7 +95,7 @@ public class ControllerNewAppointment {
     private TextField tfApptId;
 
     @FXML
-    private ComboBox<Integer> cboCustomerId;
+    private ComboBox<Customer> cboCustomer;
 
     @FXML
     private TextField tfDescription;
@@ -107,7 +107,7 @@ public class ControllerNewAppointment {
     private TextField tfTitle;
 
     @FXML
-    private ComboBox<Integer> cboUserId;
+    private ComboBox<User> cboUser;
 
     @FXML
     void cancelButtonNewAppointment(ActionEvent event) {
@@ -118,20 +118,20 @@ public class ControllerNewAppointment {
     @FXML
     void saveButtonNewAppointment(ActionEvent event) {
         StringBuilder problems = new StringBuilder();
-        String title = tfTitle.getText();
-        String description = tfDescription.getText();
-        String location = tfLocation.getText();
-        String type = tfType.getText();
+        String title = tfTitle.getText().trim();
+        String description = tfDescription.getText().trim();
+        String location = tfLocation.getText().trim();
+        String type = tfType.getText().trim();
         Contact contact = cboContact.getValue();
         LocalDate startDate = dpStartDate.getValue();
         String startTimeString = cboStartTime.getValue();
         LocalDate endDate = dpEndDate.getValue();
         String endTimeString = cboEndTime.getValue();
-        Integer customerId = cboCustomerId.getValue();
-        Integer userId = cboUserId.getValue();
+        Customer customer = cboCustomer.getValue();
+        User user = cboUser.getValue();
 
         if(title.trim().equals("") || description.trim().equals("") || location.trim().equals("") || type.trim().equals("")
-                || contact == null || startDate == null || startTimeString == null || endDate == null || endTimeString == null || customerId == null || userId == null){
+                || contact == null || startDate == null || startTimeString == null || endDate == null || endTimeString == null || customer == null || user == null){
             problems.append("Blank fields are not allowed.\n");
         } else {
             LocalDateTime startTime = LocalDateTime.of(startDate, LocalTime.parse(startTimeString, DateTimeFormatter.ofPattern("h:mm a")));
@@ -141,15 +141,19 @@ public class ControllerNewAppointment {
             }
             ZonedDateTime startInUtc = TimeConverter.localToUtc(startTime);
             ZonedDateTime endInUtc = TimeConverter.localToUtc(endTime);
-            //lambda
-            Customer customer = DatabaseLists.findByProperty(DatabaseLists.getCustomerList(),c -> c.getId() == customerId);
+            String conflict = "Customer already has an appointment scheduled for this time.";
             for(Appointment appt : customer.getAppointments()) {
                 if ((startInUtc.isAfter(appt.getStartTime()) || startInUtc.isEqual(appt.getStartTime())) && startInUtc.isBefore(appt.getEndTime())) {
-                    problems.append("Customer already has an appointment scheduled for this time.");
+                    problems.append(conflict);
                     break;
                 }
                 if ((endInUtc.isBefore(appt.getEndTime()) || endInUtc.isEqual(appt.getEndTime())) && endInUtc.isAfter(appt.getStartTime())) {
-                    problems.append("Customer already has an appointment scheduled for this time.");
+                    problems.append(conflict);
+                    break;
+                }
+                if(startInUtc.isBefore(appt.getStartTime()) && endInUtc.isAfter(appt.getEndTime())
+                        && Integer.parseInt(tfApptId.getText()) != appt.getId()){
+                    problems.append(conflict);
                     break;
                 }
             }
@@ -180,8 +184,8 @@ public class ControllerNewAppointment {
                 ps.setString(4, type);
                 ps.setString(5,Timestamp.valueOf(startTime.toLocalDateTime()).toString());
                 ps.setString(6, Timestamp.valueOf(endTime.toLocalDateTime()).toString());
-                ps.setInt(7, customerId);
-                ps.setInt(8, userId);
+                ps.setInt(7, customer.getId());
+                ps.setInt(8, user.getId());
                 ps.setInt(9, contact.getId());
                 ps.executeUpdate();
                 cancelButtonNewAppointment(event);

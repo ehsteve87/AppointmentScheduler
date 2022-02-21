@@ -542,12 +542,12 @@ public class ControllerMainPage {
 
     @FXML
     private void newAppointmentButton(ActionEvent event) throws IOException {
-        openModal("NewAppointment.fxml", "New Appointment", event);
+        openModal("NewAppointment.fxml", "New Appointment", 750, event);
     }
 
     @FXML
     private void newCustomerButton(ActionEvent event) throws IOException {
-        openModal("newCustomer.fxml", "New Customer", event);
+        openModal("newCustomer.fxml", "New Customer", 600, event);
     }
 
     @FXML
@@ -584,10 +584,11 @@ public class ControllerMainPage {
     }
 
     @FXML
-    private void openModal(String fxml, String windowTitle, ActionEvent event) throws IOException {
+    private void openModal(String fxml, String windowTitle, double width, ActionEvent event) throws IOException {
         Stage newWindow = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml));
-        Scene updateAppointmentPage = new Scene(fxmlLoader.load(), 600, 400);
+        Scene updateAppointmentPage = new Scene(fxmlLoader.load(), width, 400);
+
         newWindow.setTitle(windowTitle);
         newWindow.setScene(updateAppointmentPage);
         newWindow.initModality(Modality.WINDOW_MODAL);
@@ -609,7 +610,7 @@ public class ControllerMainPage {
             alert.showAndWait();
         } else {
             Appointment.setApptToUpdate(tblAppointments.getSelectionModel().getSelectedItem());
-            openModal("updateAppointment.fxml", "Update Appointment", event);
+            openModal("updateAppointment.fxml", "Update Appointment", 750, event);
         }
     }
 
@@ -621,7 +622,7 @@ public class ControllerMainPage {
             alert.setContentText("No customer selected");
             alert.showAndWait();
         } else {
-            openModal("updateCustomer.fxml", "Update Customer", event);
+            openModal("updateCustomer.fxml", "Update Customer", 750, event);
         }
     }
 

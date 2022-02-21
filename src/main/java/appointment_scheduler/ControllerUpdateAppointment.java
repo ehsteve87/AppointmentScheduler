@@ -42,20 +42,20 @@ public class ControllerUpdateAppointment {
         DatabaseLists.getContactList().forEach(c -> cboContact.getItems().add(c));
 
         //populate customerId combo box
-        cboCustomerId.getItems().clear();
+        cboCustomer.getItems().clear();
         //lambda
-        DatabaseLists.getCustomerList().forEach(c -> cboCustomerId.getItems().add(c.getId()));
-        if(Customer.getCustomerToUpdate() != null){
-            cboCustomerId.setValue(Customer.getCustomerToUpdate().getId());
-            cboCustomerId.setDisable(true);
+        DatabaseLists.getCustomerList().forEach(c -> cboCustomer.getItems().add(c));
+        if(Customer.getCustomerForNewAppointment() != null){
+            cboCustomer.setValue(Customer.getCustomerForNewAppointment());
+            cboCustomer.setDisable(true);
             Customer.setCustomerToUpdate(null);
 
         }
 
         //populate UserId combo box
-        cboUserId.getItems().clear();
+        cboUser.getItems().clear();
         //lambda
-        DatabaseLists.getUserList().forEach(u -> cboUserId.getItems().add(u.getId()));
+        DatabaseLists.getUserList().forEach(u -> cboUser.getItems().add(u));
 
         //populate startTime combo box
         cboStartTime.getItems().clear();
@@ -80,12 +80,10 @@ public class ControllerUpdateAppointment {
         cboStartTime.setValue(TimeConverter.utcToLocal(Appointment.getApptToUpdate().getStartTime()).toLocalTime().format(DateTimeFormatter.ofPattern("h:mm a")));
         dpEndDate.setValue(TimeConverter.utcToLocal(Appointment.getApptToUpdate().getEndTime()).toLocalDate());
         cboEndTime.setValue(TimeConverter.utcToLocal(Appointment.getApptToUpdate().getEndTime()).toLocalTime().format(DateTimeFormatter.ofPattern("h:mm a")));
-        cboCustomerId.setValue(Appointment.getApptToUpdate().getCustomerId());
-        cboUserId.setValue(Appointment.getApptToUpdate().getUserId());
-
-
-
-
+        //lambda
+        cboCustomer.setValue(DatabaseLists.findByProperty(DatabaseLists.getCustomerList(), c -> c.getId() == Appointment.getApptToUpdate().getCustomerId()));
+        //lambda
+        cboUser.setValue(DatabaseLists.findByProperty(DatabaseLists.getUserList(), u -> u.getId() == Appointment.getApptToUpdate().getUserId()));
     }
 
     @FXML
@@ -116,7 +114,7 @@ public class ControllerUpdateAppointment {
     private TextField tfApptId;
 
     @FXML
-    private ComboBox<Integer> cboCustomerId;
+    private ComboBox<Customer> cboCustomer;
 
     @FXML
     private TextField tfDescription;
@@ -128,7 +126,7 @@ public class ControllerUpdateAppointment {
     private TextField tfTitle;
 
     @FXML
-    private ComboBox<Integer> cboUserId;
+    private ComboBox<User> cboUser;
 
     @FXML
     void cancelButtonUpdateAppointment(ActionEvent event) {
@@ -140,20 +138,20 @@ public class ControllerUpdateAppointment {
     void saveButtonUpdateAppointment(ActionEvent event) {
         StringBuilder problems = new StringBuilder();
         Integer apptId = Integer.parseInt(tfApptId.getText());
-        String title = tfTitle.getText();
-        String description = tfDescription.getText();
-        String location = tfLocation.getText();
-        String type = tfType.getText();
+        String title = tfTitle.getText().trim();
+        String description = tfDescription.getText().trim();
+        String location = tfLocation.getText().trim();
+        String type = tfType.getText().trim();
         Contact contact = cboContact.getValue();
         LocalDate startDate = dpStartDate.getValue();
         String startTimeString = cboStartTime.getValue();
         LocalDate endDate = dpEndDate.getValue();
         String endTimeString = cboEndTime.getValue();
-        Integer customerId = cboCustomerId.getValue();
-        Integer userId = cboUserId.getValue();
+        Customer customer = cboCustomer.getValue();
+        User user = cboUser.getValue();
 
         if(title.trim().equals("") || description.trim().equals("") || location.trim().equals("") || type.trim().equals("")
-                || contact == null || startDate == null || startTimeString == null || endDate == null || endTimeString == null || customerId == null || userId == null){
+                || contact == null || startDate == null || startTimeString == null || endDate == null || endTimeString == null || customer == null || user == null){
             problems.append("Blank fields are not allowed.\n");
         } else {
             LocalDateTime startTime = LocalDateTime.of(startDate, LocalTime.parse(startTimeString, DateTimeFormatter.ofPattern("h:mm a")));
@@ -163,8 +161,6 @@ public class ControllerUpdateAppointment {
             }
             ZonedDateTime startInUtc = TimeConverter.localToUtc(startTime);
             ZonedDateTime endInUtc = TimeConverter.localToUtc(endTime);
-            //lambda
-            Customer customer = DatabaseLists.findByProperty(DatabaseLists.getCustomerList(),c -> c.getId() == customerId);
             for(Appointment appt : customer.getAppointments()) {
                 String conflict = "Customer already has an appointment scheduled for this time.";
                 if ((startInUtc.isAfter(appt.getStartTime()) || startInUtc.isEqual(appt.getStartTime())) && startInUtc.isBefore(appt.getEndTime())
@@ -201,7 +197,7 @@ public class ControllerUpdateAppointment {
                     "', End = '" + Timestamp.valueOf(endTime.toLocalDateTime()) +
                     "', Last_Update = '" + Timestamp.valueOf(TimeConverter.getNowInUtc().toLocalDateTime()) +
                     "', Last_Updated_By = '" + User.getLoggedInUser().getUsername() +
-                    "', Customer_ID = " + customerId + ", User_ID = " + userId + ", Contact_ID = " + contact.getId() +
+                    "', Customer_ID = " + customer.getId() + ", User_ID = " + user.getId() + ", Contact_ID = " + contact.getId() +
                     " WHERE Appointment_ID = " + apptId + ";";
 
             try(var ps = JDBC.conn.prepareStatement(sql)){
