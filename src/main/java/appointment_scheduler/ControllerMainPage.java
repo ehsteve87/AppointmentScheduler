@@ -206,7 +206,7 @@ public class ControllerMainPage {
         }
 
         //Load divisions from database
-        String divisionQuery = "SELECT Division_ID, Division, Country_ID FROM first_level_divisions;";
+        String divisionQuery = "SELECT Division_ID, Division, Country_ID FROM first_level_divisions ORDER BY Division;";
         try(PreparedStatement ps = JDBC.conn.prepareStatement(divisionQuery);
             ResultSet rs = ps.executeQuery()){
             while(rs.next()){
@@ -479,7 +479,7 @@ public class ControllerMainPage {
     @FXML
     private Button btnCountAppts;
 
-    //this method fixes a feature/bug of javafx where the combo box prompt goes away if you reinitialize a form while a value is selected.
+    //this method fixes a javafx bug where the combo box prompt goes away if you reinitialize a scene while a value is selected.
     @FXML
     private void resetPromptText(ComboBox cbo, String prompt) {
         cbo.setPromptText(prompt);
@@ -506,7 +506,6 @@ public class ControllerMainPage {
     @FXML
     private void deleteAppointmentButton(ActionEvent event) {
         Appointment selectedAppt = tblAppointments.getSelectionModel().getSelectedItem();
-        System.out.println(selectedAppt);
         if(selectedAppt != null){
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Appointment");
@@ -516,6 +515,11 @@ public class ControllerMainPage {
                 String sql = "DELETE FROM appointments WHERE Appointment_ID=" + selectedAppt.getId() + ";";
                 try(var ps = JDBC.conn.prepareStatement(sql)){
                     ps.executeUpdate();
+                    Alert done = new Alert(Alert.AlertType.INFORMATION);
+                    done.setTitle("Delete Appointment");
+                    done.setHeaderText("Successfully deleted appointment");
+                    done.setContentText("Appointment ID: " + selectedAppt.getId() + "\nAppointment Type: " + selectedAppt.getType());
+                    done.show();
                     initialize();
                 } catch (SQLException e){
                     System.out.println(e);
@@ -532,11 +536,39 @@ public class ControllerMainPage {
 
     @FXML
     private void deleteCustomerButton(ActionEvent event) {
-        if(tblCustomers.getSelectionModel().getSelectedItem() == null){
+        Customer customerToDelete = tblCustomers.getSelectionModel().getSelectedItem();
+        if(customerToDelete == null){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setHeaderText("Delete Customer");
             alert.setContentText("No customer selected");
             alert.showAndWait();
+        } else {
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Delete Customer");
+            confirmation.setHeaderText("Are you sure you want to delete " + customerToDelete.getName() + " and all their appointments?");
+            Optional<ButtonType> answer = confirmation.showAndWait();
+            if(answer.get() == ButtonType.OK){
+                String deleteSQL = "DELETE FROM appointments WHERE Appointment_ID = ?;";
+                for(int i=0; i<customerToDelete.getAppointments().size(); i++){
+                    try(var ps = JDBC.conn.prepareStatement(deleteSQL)){
+                        ps.setInt(1, customerToDelete.getAppointments().get(i).getId());
+                        ps.executeUpdate();
+                    } catch (SQLException e){
+                        System.out.println(e);
+                    }
+                }
+                try(var ps = JDBC.conn.prepareStatement("DELETE FROM customers WHERE Customer_ID = " + customerToDelete.getId())){
+                    ps.executeUpdate();
+                    Alert done = new Alert(Alert.AlertType.INFORMATION);
+                    done.setTitle("Delete Customer");
+                    done.setHeaderText("Successfully deleted " + customerToDelete.getName() + " and all their appointments.");
+                    done.show();
+                    initialize();
+                } catch (SQLException e){
+                    System.out.println(e);
+                }
+            }
+
         }
     }
 
@@ -557,7 +589,7 @@ public class ControllerMainPage {
             alert.setHeaderText("No customer selected.");
             alert.showAndWait();
         } else {
-            Customer.setCustomerToUpdate(tblCustomers.getSelectionModel().getSelectedItem());
+            Customer.setSelectedCustomer(tblCustomers.getSelectionModel().getSelectedItem());
             newAppointmentButton(event);
         }
     }
@@ -595,6 +627,7 @@ public class ControllerMainPage {
         newWindow.initOwner(((Node) event.getTarget()).getScene().getWindow());
         newWindow.setOnHidden(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
+                Customer.setSelectedCustomer(null);
                 initialize();
             }
         });
@@ -622,7 +655,8 @@ public class ControllerMainPage {
             alert.setContentText("No customer selected");
             alert.showAndWait();
         } else {
-            openModal("updateCustomer.fxml", "Update Customer", 750, event);
+            Customer.setSelectedCustomer(tblCustomers.getSelectionModel().getSelectedItem());
+            openModal("updateCustomer.fxml", "Update Customer", 600, event);
         }
     }
 

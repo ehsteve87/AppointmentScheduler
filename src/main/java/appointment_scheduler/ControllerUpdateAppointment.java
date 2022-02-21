@@ -45,10 +45,10 @@ public class ControllerUpdateAppointment {
         cboCustomer.getItems().clear();
         //lambda
         DatabaseLists.getCustomerList().forEach(c -> cboCustomer.getItems().add(c));
-        if(Customer.getCustomerForNewAppointment() != null){
-            cboCustomer.setValue(Customer.getCustomerForNewAppointment());
+        if(Customer.getSelectedCustomer() != null){
+            cboCustomer.setValue(Customer.getSelectedCustomer());
             cboCustomer.setDisable(true);
-            Customer.setCustomerToUpdate(null);
+            Customer.setSelectedCustomer(null);
 
         }
 
