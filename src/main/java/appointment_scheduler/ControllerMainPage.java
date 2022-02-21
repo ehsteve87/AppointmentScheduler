@@ -20,10 +20,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class ControllerMainPage {
 
@@ -190,6 +187,41 @@ public class ControllerMainPage {
         } catch (SQLException e){
             System.out.println(e);
         }
+
+
+        //Load countries from database
+        DatabaseLists.getCountryList().clear();
+        String countryQuery = "SELECT * FROM countries;";
+        try(PreparedStatement ps = JDBC.conn.prepareStatement(countryQuery);
+            ResultSet rs = ps.executeQuery()){
+            while(rs.next()){
+                Country country = new Country(
+                        rs.getInt("Country_ID"),
+                        rs.getString("Country")
+                );
+                DatabaseLists.getCountryList().add(country);
+            }
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+
+        //Load divisions from database
+        String divisionQuery = "SELECT Division_ID, Division, Country_ID FROM first_level_divisions;";
+        try(PreparedStatement ps = JDBC.conn.prepareStatement(divisionQuery);
+            ResultSet rs = ps.executeQuery()){
+            while(rs.next()){
+                Division division = new Division(
+                        rs.getInt("Division_ID"),
+                        rs.getString("Division"),
+                        rs.getInt("Country_ID")
+                );
+                Country country = DatabaseLists.findByProperty(DatabaseLists.getCountryList(), c -> c.getId() == division.getCountryId());
+                country.getDivisionList().add(division);
+            }
+        } catch (SQLException e){
+            System.out.println(e);
+        }
+
 
         //populate contact combo box on reports tab
         cboContactSchedule.getItems().clear();
@@ -474,21 +506,38 @@ public class ControllerMainPage {
     @FXML
     private void deleteAppointmentButton(ActionEvent event) {
         Appointment selectedAppt = tblAppointments.getSelectionModel().getSelectedItem();
+        System.out.println(selectedAppt);
         if(selectedAppt != null){
-            String sql = "DELETE FROM appointments WHERE Appointment_ID=" + selectedAppt.getId() + ";";
-            try(var ps = JDBC.conn.prepareStatement(sql)){
-                ps.executeUpdate();
-                initialize();
-            } catch (SQLException e){
-                System.out.println(e);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Appointment");
+            alert.setHeaderText("Are you sure you want to delete " + selectedAppt.getTitle() + "?");
+            Optional<ButtonType> answer = alert.showAndWait();
+            if(answer.get() == ButtonType.OK){
+                String sql = "DELETE FROM appointments WHERE Appointment_ID=" + selectedAppt.getId() + ";";
+                try(var ps = JDBC.conn.prepareStatement(sql)){
+                    ps.executeUpdate();
+                    initialize();
+                } catch (SQLException e){
+                    System.out.println(e);
+                }
             }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Delete Appointment");
+            alert.setHeaderText("No Appointment Selected");
+            alert.showAndWait();
         }
 
     }
 
     @FXML
     private void deleteCustomerButton(ActionEvent event) {
-
+        if(tblCustomers.getSelectionModel().getSelectedItem() == null){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Delete Customer");
+            alert.setContentText("No customer selected");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -555,7 +604,9 @@ public class ControllerMainPage {
     private void updateAppointmentButton(ActionEvent event) throws IOException {
         if(tblAppointments.getSelectionModel().getSelectedItem() == null){
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setHeaderText("No appointment selected.");
+            alert.setTitle("Update Appointment");
+            alert.setHeaderText("No appointment selected");
+            alert.showAndWait();
         } else {
             Appointment.setApptToUpdate(tblAppointments.getSelectionModel().getSelectedItem());
             openModal("updateAppointment.fxml", "Update Appointment", event);
@@ -564,7 +615,14 @@ public class ControllerMainPage {
 
     @FXML
     private void updateCustomerButton(ActionEvent event) throws IOException {
-        openModal("updateCustomer.fxml", "Update Customer", event);
+        if(tblCustomers.getSelectionModel().getSelectedItem() == null){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Update Customer");
+            alert.setContentText("No customer selected");
+            alert.showAndWait();
+        } else {
+            openModal("updateCustomer.fxml", "Update Customer", event);
+        }
     }
 
     @FXML

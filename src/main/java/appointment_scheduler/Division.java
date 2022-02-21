@@ -12,6 +12,11 @@ public class Division extends Updatable{
         this.countryId = countryId;
     }
 
+    @Override
+    public String toString(){
+        return this.name;
+    }
+
     public int getId() {
         return id;
     }

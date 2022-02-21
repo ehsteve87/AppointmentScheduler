@@ -1,24 +1,33 @@
 package appointment_scheduler;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
-public class Country {
+public class Country extends Updatable{
     private int id;
     private String name;
-    private ZonedDateTime createDate;
-    private User createdBy;
-    private ZonedDateTime lastUpdate;
-    private User lastUpdatedBy;
     private ArrayList<Division> divisionList;
 
     public Country(int id, String name) {
+        super();
         this.id = id;
         this.name = name;
-        this.createDate = TimeConverter.getNowInUtc();
-        this.createdBy = User.getLoggedInUser();
-        this.lastUpdate = TimeConverter.getNowInUtc();
-        this.lastUpdatedBy = User.getLoggedInUser();
-        this.divisionList = divisionList;
+        this.divisionList = new ArrayList<>();
+    }
+
+    @Override
+    public String toString(){
+        return this.name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Division> getDivisionList() {
+        return divisionList;
     }
 }
