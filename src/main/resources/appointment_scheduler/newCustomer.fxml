@@ -29,17 +29,17 @@
          <children>
             <Label text="Name" GridPane.rowIndex="1" />
             <Label text="Address" GridPane.rowIndex="2" />
-            <Label text="Postal Code" GridPane.rowIndex="3" />
-            <Label text="Country" GridPane.rowIndex="4" />
-            <Label text="Division" GridPane.rowIndex="5" />
+            <Label text="Country" GridPane.rowIndex="3" />
+            <Label text="Division" GridPane.rowIndex="4" />
+            <Label text="Postal Code" GridPane.rowIndex="5" />
             <Label text="Phone" GridPane.rowIndex="6" />
             <Label text="Customer ID" />
             <TextField disable="true" text="Auto Generated" GridPane.columnIndex="1" />
             <TextField fx:id="tfName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="tfAddress" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="tfPostal" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ComboBox fx:id="cboCountry" onAction="#populateDivisionComboBox" prefHeight="25.0" prefWidth="192.0" promptText="Choose a Country" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox fx:id="cboDivision" disable="true" prefHeight="25.0" prefWidth="192.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ComboBox fx:id="cboCountry" onAction="#populateDivisionComboBox" prefHeight="25.0" prefWidth="192.0" promptText="Choose a Country" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ComboBox fx:id="cboDivision" disable="true" prefHeight="25.0" prefWidth="192.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="tfPostal" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <TextField fx:id="tfPhone" GridPane.columnIndex="1" GridPane.rowIndex="6" />
          </children>
       </GridPane>

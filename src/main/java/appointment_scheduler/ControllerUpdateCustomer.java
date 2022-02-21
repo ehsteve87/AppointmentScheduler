@@ -16,10 +16,10 @@ public class ControllerUpdateCustomer {
     private Button btnSave;
 
     @FXML
-    private ComboBox<String> cboCountry;
+    private ComboBox<Country> cboCountry;
 
     @FXML
-    private ComboBox<String> cboDivision;
+    private ComboBox<Division> cboDivision;
 
     @FXML
     private TextField tfAddress;
@@ -35,6 +35,17 @@ public class ControllerUpdateCustomer {
 
     @FXML
     private TextField tfPostal;
+
+    //lambda
+    @FXML
+    private void populateDivisionComboBox(){
+        if(cboCountry.getValue() != null){
+            cboDivision.getItems().clear();
+            Country country  = cboCountry.getValue();
+            country.getDivisionList().forEach(d -> cboDivision.getItems().add(d));
+            cboDivision.setDisable(false);
+        }
+    }
 
     @FXML
     void cancelButtonUpdateCustomer(ActionEvent event) {
