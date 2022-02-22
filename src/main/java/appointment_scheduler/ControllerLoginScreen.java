@@ -21,6 +21,10 @@ import java.util.ResourceBundle;
 
 public class ControllerLoginScreen {
 
+    private static boolean fromLoginScreen = true;
+
+    public static boolean getFromLoginScreen(){return fromLoginScreen;}
+
     @FXML
     private Button btnLogin;
 
@@ -80,6 +84,7 @@ public class ControllerLoginScreen {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();
+                fromLoginScreen =false;
 
             } else {
                 logText.append("Failure");

@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ControllerMainPage {
@@ -309,6 +310,26 @@ public class ControllerMainPage {
         colScheduleCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         tblContactSchedule.sort();
 
+        //Upcoming appointments alert
+        System.out.println(ControllerLoginScreen.getFromLoginScreen());
+        if(ControllerLoginScreen.getFromLoginScreen()) {
+            StringBuilder upcomingAppts = new StringBuilder();
+            for (Appointment appt : DatabaseLists.getApptList()) {
+                if (appt.getStartTime().isAfter(TimeConverter.getNowInUtc()) && appt.getStartTime().isBefore(TimeConverter.getNowInUtc().plusMinutes(15))) {
+                    upcomingAppts.append("Time: " + TimeConverter.utcToLocal(appt.getStartTime()).format(DateTimeFormatter.ofPattern("MMMM d, h:mm a")) + "\tAppointment ID: " + appt.getId() + "\n");
+                }
+            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Upcoming Appointments");
+            if (upcomingAppts.isEmpty()) {
+                alert.setHeaderText("No upcoming appointments!");
+                alert.show();
+            } else {
+                alert.setHeaderText("The following appointments begin in the next 15 minutes:");
+                alert.setContentText(upcomingAppts.toString());
+                alert.show();
+            }
+        }
     }
 
     @FXML
