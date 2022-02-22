@@ -311,11 +311,11 @@ public class ControllerMainPage {
         tblContactSchedule.sort();
 
         //Upcoming appointments alert
-        System.out.println(ControllerLoginScreen.getFromLoginScreen());
         if(ControllerLoginScreen.getFromLoginScreen()) {
             StringBuilder upcomingAppts = new StringBuilder();
             for (Appointment appt : DatabaseLists.getApptList()) {
-                if (appt.getStartTime().isAfter(TimeConverter.getNowInUtc()) && appt.getStartTime().isBefore(TimeConverter.getNowInUtc().plusMinutes(15))) {
+                LocalDateTime ldt = TimeConverter.utcToLocal(appt.getStartTime()).toLocalDateTime();
+                if (ldt.isAfter(LocalDateTime.now()) && ldt.isBefore(LocalDateTime.now().plusMinutes(15))) {
                     upcomingAppts.append("Time: " + TimeConverter.utcToLocal(appt.getStartTime()).format(DateTimeFormatter.ofPattern("MMMM d, h:mm a")) + "\tAppointment ID: " + appt.getId() + "\n");
                 }
             }

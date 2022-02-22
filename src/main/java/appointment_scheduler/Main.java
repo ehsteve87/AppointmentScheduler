@@ -21,6 +21,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         JDBC.openConnection();
 //        Locale.setDefault(new Locale("fr"));
+//        TimeZone.setDefault(TimeZone.getTimeZone("ACT"));
         launch();
         JDBC.closeConnection();
     }
