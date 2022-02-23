@@ -10,8 +10,14 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/**
+ * this class controls the Update Customer window
+ */
 public class ControllerUpdateCustomer {
-    //various lambdas
+    /**
+     * Initializes the New Customer window.
+     * Uses lambdas to iterate through the list of countries and to use the DatabaseLists.findByProperty method
+     */
     public void initialize(){
         cboCountry.getItems().clear();
         //lambda
@@ -30,34 +36,58 @@ public class ControllerUpdateCustomer {
         Customer.setSelectedCustomer(null);
     }
 
+    /**
+     * the Cancel button
+     */
     @FXML
     private Button btnCancel;
 
-    @FXML
-    private Button btnSave;
-
+    /**
+     * the country combo box
+     */
     @FXML
     private ComboBox<Country> cboCountry;
 
+    /**
+     * the Division combo box
+     */
     @FXML
     private ComboBox<Division> cboDivision;
 
+    /**
+     * the Address field
+     */
     @FXML
     private TextField tfAddress;
 
-    @FXML
-    private TextField tfCustomerId;
-
+    /**
+     * the Name field
+     */
     @FXML
     private TextField tfName;
 
+    /**
+     * the Customer ID field
+     */
+    @FXML
+    private TextField tfCustomerId;
+
+    /**
+     * the Phone field
+     */
     @FXML
     private TextField tfPhone;
 
+    /**
+     * the Postal field
+     */
     @FXML
     private TextField tfPostal;
 
-    //lambda
+    /**
+     * When a new country is selected, this method populates the Division combo box with the appropriate divisions.
+     * Uses a lambda as part of a forEach method
+     */
     @FXML
     private void populateDivisionComboBox(){
         if(cboCountry.getValue() != null){
@@ -68,12 +98,20 @@ public class ControllerUpdateCustomer {
         }
     }
 
+    /**
+     * Handles the cancel button
+     * @param event
+     */
     @FXML
     void cancelButtonUpdateCustomer(ActionEvent event) {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Handles the Save button
+     * @param event
+     */
     @FXML
     void saveButtonUpdateCustomer(ActionEvent event) {
         int customerId = Integer.valueOf(tfCustomerId.getText());
