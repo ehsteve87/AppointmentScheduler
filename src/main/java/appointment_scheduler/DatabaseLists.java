@@ -51,18 +51,34 @@ public abstract class DatabaseLists {
         return customerList;
     }
 
+    /**
+     * Getter for the user list
+     * @return the user list
+     */
     public static ObservableList<User> getUserList() {
         return userList;
     }
 
+    /**
+     * Getter for the appointment list
+     * @return the appointment list
+     */
     public static ObservableList<Appointment> getApptList() {
         return apptList;
     }
 
+    /**
+     * Getter for the contact list
+     * @return the contact list
+     */
     public static ObservableList<Contact> getContactList() {
         return contactList;
     }
 
+    /**
+     * Getter for the country list
+     * @return the country list
+     */
     public static ObservableList<Country> getCountryList() {
         return countryList;
     }

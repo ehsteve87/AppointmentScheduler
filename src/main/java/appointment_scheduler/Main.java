@@ -7,8 +7,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Entry point for the application
+ */
 public class Main extends Application {
 
+    /**
+     * Sets starting stage and scene
+     * @param stage the starting stage
+     * @throws IOException
+     */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("loginScreen.fxml"));
@@ -18,6 +26,10 @@ public class Main extends Application {
         stage.show();
     }
 
+    /**
+     * Launches the application
+     * @param args
+     */
     public static void main(String[] args) {
         JDBC.openConnection();
 //        Locale.setDefault(new Locale("fr"));
