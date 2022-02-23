@@ -23,8 +23,20 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * Controls the main page of the application, which has three tabs: Appointments, Customers, and Reports.
+ */
 public class ControllerMainPage {
 
+    /**
+     * Initializes the main page. First, it makes sure that all users that exist in non-user tables also exist in the Users table.
+     * Then, it fetches records from the databse and loads them into Java classes.
+     * Next, it populates the various tables and reports on the main page.
+     * Finally, it shows an alert about upcoming appointments.
+     *
+     * This method uses several lambda expressions. Some are to make use of the DatabaseLists.findByProperty static method,
+     * and others are to use the forEach method.
+     */
     public void initialize(){
         //Create Set of all possible users
         Set<String> possibleUsers = new HashSet<>();
@@ -332,175 +344,232 @@ public class ControllerMainPage {
         }
     }
 
-    @FXML
-    private Button btnCreateApptForCustomer;
-
-    @FXML
-    private Button btnDeleteAppointment;
-
-    @FXML
-    private Button btnDeleteCustomer;
-
-    @FXML
-    private Button btnNewAppointment;
-
-    @FXML
-    private Button btnNewCustomer;
-
-    @FXML
-    private Button btnUpdateAppointment;
-
-    @FXML
-    private Button btnUpdateCustomer;
-
+    /**
+     * Combo box to choose between contacts to view their schedule
+     */
     @FXML
     private ComboBox<String> cboContactSchedule;
 
+    /**
+     * Month combo box for appointment counter report
+     */
     @FXML
     private ComboBox<String> cboCounterMonth;
 
-    @FXML
-    private ComboBox<String> cboCounterYear;
-
+    /**
+     * Type combo box for appointment counter report
+     */
     @FXML
     private ComboBox<String> cboCounterType;
 
+    /**
+     * Type combo box for appointment length report
+     */
     @FXML
     private ComboBox<String> cboLengthType;
 
-    @FXML
-    private ComboBox<String> cboSearchAppointments;
-
-    @FXML
-    private ComboBox<String> cboSearchCustomers;
-
+    /**
+     * Table column for contacts
+     */
     @FXML
     private TableColumn<Appointment, String> colApptContact;
 
+    /**
+     * Table column for customer IDs
+     */
     @FXML
     private TableColumn<Appointment, Integer> colApptCustomerId;
 
+    /**
+     * Table column for appointment descriptions
+     */
     @FXML
     private TableColumn<Appointment, String> colApptDescription;
 
+    /**
+     * Table column for appointment end times
+     */
     @FXML
     private TableColumn<Appointment, String> colApptEnd;
 
+    /**
+     * Table column for appointment IDs
+     */
     @FXML
     private TableColumn<Appointment, Integer> colApptId;
 
+    /**
+     * Table column for locations
+     */
     @FXML
     private TableColumn<Appointment, String> colApptLocation;
 
+    /**
+     * Table column for appointment start times
+     */
     @FXML
     private TableColumn<Appointment, String> colApptStart;
 
+    /**
+     * Table column for appointment titles
+     */
     @FXML
     private TableColumn<Appointment, String> colApptTitle;
 
+    /**
+     * Table column for user IDs
+     */
     @FXML
     private TableColumn<Appointment, Integer> colApptUserId;
 
+    /**
+     * Table to show customers
+     */
     @FXML
     private TableView<Customer> tblCustomers;
 
+    /**
+     * Table column for addresses
+     */
     @FXML
     private TableColumn<Customer, String> colCustAddress;
 
+    /**
+     * Table column for countries
+     */
     @FXML
     private TableColumn<Customer, String> colCustCountry;
 
+    /**
+     * Table column for customer creation dates
+     */
     @FXML
     private TableColumn<Customer, String> colCustCreateDate;
 
+    /**
+     * Table column for the user that created the customer
+     */
     @FXML
     private TableColumn<Customer, String> colCustCreatedBy;
 
+    /**
+     * Table column for divisions
+     */
     @FXML
     private TableColumn<Customer, String> colCustDivision;
 
+    /**
+     * Table column for customer IDs
+     */
     @FXML
     private TableColumn<Customer, Integer> colCustId;
 
+    /**
+     * Table column for date of last update
+     */
     @FXML
     private TableColumn<Customer, String> colCustLastUpdate;
 
+    /**
+     * Table column for customer names
+     */
     @FXML
     private TableColumn<Customer, String> colCustName;
 
+    /**
+     * Table column for customer phone numbers
+     */
     @FXML
     private TableColumn<Customer, String> colCustPhone;
 
+    /**
+     * Table column for postal codes
+     */
     @FXML
     private TableColumn<Customer, String> colCustPostal;
 
+    /**
+     * Table column for user who last updated customer
+     */
     @FXML
     private TableColumn<Customer, String> colCustUpdatedBy;
 
+    /**
+     * Table column for customer IDs
+     */
     @FXML
     private TableColumn<Appointment, Integer> colScheduleCustomerId;
 
+    /**
+     * Table column for appointment IDs
+     */
     @FXML
     private TableColumn<Appointment, Integer> colScheduleApptId;
 
+    /**
+     * Table column for descriptions
+     */
     @FXML
     private TableColumn<Appointment, String> colScheduleDescription;
 
+    /**
+     * Table column for appointment end times
+     */
     @FXML
     private TableColumn<Appointment, String> colScheduleEnd;
 
+    /**
+     * Table column for appointment start times
+     */
     @FXML
     private TableColumn<Appointment, String> colScheduleStart;
 
+    /**
+     * Table column for appointment titles
+     */
     @FXML
     private TableColumn<Appointment, String> colScheduleTitle;
 
+    /**
+     * Table column for appointment types
+     */
     @FXML
     private TableColumn<Appointment, String> colScheduleType;
 
-    @FXML
-    private Label lblAverageLength;
-
-    @FXML
-    private Label lblCount;
-
+    /**
+     * All time radio button
+     */
     @FXML
     private RadioButton rdoAllTime;
 
-    @FXML
-    private RadioButton rdoThisMonth;
-
-    @FXML
-    private RadioButton rdoThisWeek;
-
-    @FXML
-    private Tab tabAppointments;
-
-    @FXML
-    private Tab tabCustomers;
-
+    /**
+     * Table column for customer IDs
+     */
     @FXML
     private TableView<Appointment> tblAppointments;
 
+    /**
+     * Contact Schedule table
+     */
     @FXML
     private TableView<Appointment> tblContactSchedule;
 
-    @FXML
-    private TextField tfSearchAppointments;
-
-    @FXML
-    private TextField tfSearchCustomers;
-
-    @FXML
-    private ToggleGroup timeFilter;
-
+    /**
+     * Button to calculate average appointment length
+     */
     @FXML
     private Button btnAverageLength;
 
+    /**
+     * Button to count appointments
+     */
     @FXML
     private Button btnCountAppts;
 
-    //this method fixes a javafx bug where the combo box prompt goes away if you reinitialize a scene while a value is selected.
+    /**
+     * This method fixes a javafx bug where the combo box prompt goes away if you reinitialize a scene while a value is selected.
+     */
+
     @FXML
     private void resetPromptText(ComboBox cbo, String prompt) {
         cbo.setPromptText(prompt);
@@ -517,13 +586,20 @@ public class ControllerMainPage {
         });
     }
 
-    //lambda
+    /**
+     * This method filters a tableview based on some criteria.
+     * It uses a lambda expression to choose which collection elements are shown in the table.
+     */
     @FXML
     private void filterContactSchedule(ActionEvent event) {
         tblContactSchedule.setItems(new FilteredList<>(DatabaseLists.getApptList(),
                                         a -> a.getContactName().equals(cboContactSchedule.getValue())));
     }
 
+    /**
+     * Handles the delete appointment button
+     * @param event
+     */
     @FXML
     private void deleteAppointmentButton(ActionEvent event) {
         Appointment selectedAppt = tblAppointments.getSelectionModel().getSelectedItem();
@@ -555,6 +631,11 @@ public class ControllerMainPage {
 
     }
 
+    /**
+     * Handles the delete customer button.
+     *
+     * @param event
+     */
     @FXML
     private void deleteCustomerButton(ActionEvent event) {
         Customer customerToDelete = tblCustomers.getSelectionModel().getSelectedItem();
@@ -589,20 +670,34 @@ public class ControllerMainPage {
                     System.out.println(e);
                 }
             }
-
         }
     }
 
+    /**
+     * Handles the New Appointment button
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void newAppointmentButton(ActionEvent event) throws IOException {
         openModal("NewAppointment.fxml", "New Appointment", 750, event);
     }
 
+    /**
+     * Handles the New Customer button
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void newCustomerButton(ActionEvent event) throws IOException {
         openModal("newCustomer.fxml", "New Customer", 600, event);
     }
 
+    /**
+     * Handles the Create Appointment for Selected Customer button
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void createApptForCustomerButton(ActionEvent event) throws IOException {
         if(tblCustomers.getSelectionModel().getSelectedItem() == null){
@@ -615,14 +710,22 @@ public class ControllerMainPage {
         }
     }
 
-    //lambda
+    /**
+     * Handles the This Month Radio Button
+     * Uses a lambda expression to choose which records appear on the table
+     * @param event
+     */
     @FXML
     private void thisMonthRadioButton(ActionEvent event) {
         tblAppointments.setItems(new FilteredList<>(DatabaseLists.getApptList(),
                 a -> (a.getStartTime().getMonth() == LocalDateTime.now().getMonth()) && a.getStartTime().getYear() == LocalDateTime.now().getYear()));
     }
 
-    //lambda
+    /**
+     * Handles the This Week Radio Button
+     * Uses a lambda expression to choose which records appear on the table
+     * @param event
+     */
     @FXML
     private void thisWeekRadioButton(ActionEvent event) {
         tblAppointments.setItems(new FilteredList<>(DatabaseLists.getApptList(),
@@ -630,12 +733,25 @@ public class ControllerMainPage {
                     && a.getStartTime().isBefore(TimeConverter.getNowInUtc().plusWeeks(1))));
     }
 
-    //lambda
+    /**
+     * Handles the All Time Radio Button
+     * Uses a lambda expression to choose which records appear on the table
+     * @param event
+     */
     @FXML
     private void allTimeRadioButton(ActionEvent event) {
         tblAppointments.setItems(new FilteredList<>(DatabaseLists.getApptList(), a -> true));
     }
 
+    /**
+     * Method that opens a new modal window, such as to add or edit appointments or customers.
+     * Whenever a modal window is closed, this method reinitializes the main page.
+     * @param fxml
+     * @param windowTitle
+     * @param width
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void openModal(String fxml, String windowTitle, double width, ActionEvent event) throws IOException {
         Stage newWindow = new Stage();
@@ -655,6 +771,11 @@ public class ControllerMainPage {
         newWindow.show();
     }
 
+    /**
+     * Handles the Update Appointment button
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void updateAppointmentButton(ActionEvent event) throws IOException {
         if(tblAppointments.getSelectionModel().getSelectedItem() == null){
@@ -668,6 +789,11 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * Handles the Update Customer button
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void updateCustomerButton(ActionEvent event) throws IOException {
         if(tblCustomers.getSelectionModel().getSelectedItem() == null){
@@ -681,6 +807,10 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * By default, the Average Length button is disabled. When a type is chosen, this method enables the button.
+     * @param event
+     */
     @FXML
     private void enableAverageLengthButton(ActionEvent event){
         if(cboLengthType.getValue() != null){
@@ -688,6 +818,10 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * By default, the Count Appointments button is disabled. When appropriate values are chosen, this method enables it.
+     * @param event
+     */
     @FXML
     private void enableCountApptsButton(ActionEvent event){
         if(cboCounterMonth.getValue() != null && cboCounterType.getValue() != null){
@@ -695,6 +829,10 @@ public class ControllerMainPage {
         }
     }
 
+    /**
+     * Handles the button for the Average Appointment Length report
+     * @param event
+     */
     @FXML
     private void calculateAverageAppointmentLength(ActionEvent event){
         String typeValue = cboLengthType.getValue();
@@ -739,6 +877,10 @@ public class ControllerMainPage {
         report.showAndWait();
     }
 
+    /**
+     * Handles the button for the Count Appointments By Month report
+     * @param event
+     */
     @FXML
     private void countAppointmentsByMonth(ActionEvent event){
         String monthString = cboCounterMonth.getValue();
@@ -775,6 +917,5 @@ public class ControllerMainPage {
             report.showAndWait();
         }
     }
-
 }
 

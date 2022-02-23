@@ -13,7 +13,15 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * This class controls the New Appointment window
+ */
 public class ControllerNewAppointment {
+    /**
+     * Initializes the New Appointment window.
+     * This method uses several lambda expressions. Two are used to disable past dates so they can't be chosen by the date picker,
+     * and the rest are in forEach methods.
+     */
     public void initialize(){
 
         //disable past dates
@@ -67,54 +75,98 @@ public class ControllerNewAppointment {
         BusinessHours.getValidTimes().forEach(t -> cboEndTime.getItems().add(t.format(DateTimeFormatter.ofPattern("h:mm a"))));
     }
 
+    /**
+     * the Cancel button
+     */
     @FXML
     private Button btnCancel;
 
-    @FXML
-    private Button btnSave;
-
+    /**
+     * the Contact combo box
+     */
     @FXML
     private ComboBox<Contact> cboContact;
 
+    /**
+     * The End Time combo box
+     */
     @FXML
     private ComboBox<String> cboEndTime;
 
+    /**
+     * The Start Time combo box
+     */
     @FXML
     private ComboBox<String> cboStartTime;
 
+    /**
+     * The Type field
+     */
     @FXML
     private TextField tfType;
 
+    /**
+     * The End Date datepicker
+     */
     @FXML
     private DatePicker dpEndDate;
 
+    /**
+     * the Start Date datepicker
+     */
     @FXML
     private DatePicker dpStartDate;
 
+    /**
+     * The Appointment ID field
+     */
     @FXML
     private TextField tfApptId;
 
+    /**
+     * the Customer combo box
+     */
     @FXML
     private ComboBox<Customer> cboCustomer;
 
+    /**
+     * The Description field
+     */
     @FXML
     private TextField tfDescription;
 
+    /**
+     * The Location field
+     */
     @FXML
     private TextField tfLocation;
 
+    /**
+     * The Title field
+     */
     @FXML
     private TextField tfTitle;
 
+    /**
+     * the User combo box
+     */
     @FXML
     private ComboBox<User> cboUser;
 
+    /**
+     * Handles the cancel button
+     * @param event
+     */
     @FXML
     void cancelButtonNewAppointment(ActionEvent event) {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * handles the Save button
+     * @param event
+     */
     @FXML
     void saveButtonNewAppointment(ActionEvent event) {
         StringBuilder problems = new StringBuilder();
@@ -194,7 +246,5 @@ public class ControllerNewAppointment {
                 System.out.println(e);
             }
         }
-
     }
-
 }

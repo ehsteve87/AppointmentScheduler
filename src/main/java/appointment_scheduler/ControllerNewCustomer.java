@@ -11,38 +11,65 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/**
+ * This class controls the New Customer window
+ */
 public class ControllerNewCustomer {
-    //lambda
+    /**
+     * Initializes the New Customer window.
+     * Uses a lambda to iterate through the list of countries.
+     */
     public void initialize(){
     cboCountry.getItems().clear();
     DatabaseLists.getCountryList().forEach(c -> cboCountry.getItems().add(c));
     }
 
+    /**
+     * the Cancel button
+     */
     @FXML
     private Button btnCancel;
 
-    @FXML
-    private Button btnSave;
-
+    /**
+     * the country combo box
+     */
     @FXML
     private ComboBox<Country> cboCountry;
 
+    /**
+     * the Division combo box
+     */
     @FXML
     private ComboBox<Division> cboDivision;
 
+    /**
+     * the Address field
+     */
     @FXML
     private TextField tfAddress;
 
+    /**
+     * the Name field
+     */
     @FXML
     private TextField tfName;
 
+    /**
+     * the Phone field
+     */
     @FXML
     private TextField tfPhone;
 
+    /**
+     * the Postal field
+     */
     @FXML
     private TextField tfPostal;
 
-    //lambda
+    /**
+     * When a country is chosen, populates the Division combo box with the appropriate divisions.
+     * Uses a lambda as part of a forEach method.
+     */
     @FXML
     private void populateDivisionComboBox(){
         if(cboCountry.getValue() != null){
@@ -53,12 +80,20 @@ public class ControllerNewCustomer {
         }
     }
 
+    /**
+     * handles the Cancel button
+     * @param event
+     */
     @FXML
     private void cancelButtonNewCustomer(ActionEvent event) {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * handles the Save button
+     * @param event
+     */
     @FXML
     private void saveButtonNewCustomer(ActionEvent event) {
         String name = tfName.getText().trim();
