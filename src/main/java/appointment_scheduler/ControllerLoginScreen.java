@@ -19,35 +19,72 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+/**
+ * Controls the login screen
+ */
 public class ControllerLoginScreen {
 
+    /**
+     * Used to determine whether to show upcoming appointments. Gets set to false after first login.
+     */
     private static boolean fromLoginScreen = true;
 
+    /**
+     * Getter for fromLoginScreen
+     * @return fromLoginScreen
+     */
     public static boolean getFromLoginScreen(){return fromLoginScreen;}
 
+    /**
+     * The login button
+     */
     @FXML
     private Button btnLogin;
 
+    /**
+     * The password label
+     */
     @FXML
     private Label lblPassword;
 
+    /**
+     * The title label
+     */
     @FXML
     private Label lblTitle;
 
+    /**
+     * The username label
+     */
     @FXML
     private Label lblUsername;
 
+    /**
+     * The ZoneId label
+     */
     @FXML
     private Label lblZoneId;
 
+    /**
+     * The password field
+     */
     @FXML
     private PasswordField pfPassword;
 
+    /**
+     * The username field
+     */
     @FXML
     private TextField tfUsername;
 
+    /**
+     * The ResourceBundle with localized strings for English and French
+     */
     private ResourceBundle localizedText = ResourceBundle.getBundle("languageBundle/loginScreen");
 
+    /**
+     * Initializes the Login form
+     */
     public void initialize(){
         lblTitle.setText(localizedText.getString("title"));
         lblUsername.setText(localizedText.getString("username"));
@@ -59,6 +96,13 @@ public class ControllerLoginScreen {
 
     }
 
+    /**
+     * Handles the behavior of the login button, including cases for valid and invalid login attempts and logging attempts to login_activity.txt
+     *
+     *
+     * @param event clicking the button
+     * @throws IOException
+     */
     @FXML
     void loginButton(ActionEvent event) throws IOException {
         StringBuilder logText = new StringBuilder();
