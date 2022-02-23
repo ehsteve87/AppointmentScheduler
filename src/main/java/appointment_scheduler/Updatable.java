@@ -54,6 +54,11 @@ public abstract class Updatable {
         this.lastUpdatedByString = this.lastUpdatedBy.getUsername();
         }
 
+    /**
+     * Empty contstructor for loading items from the database
+     * @param loadFromDatabase add any boolean if you're loading from database
+     */
+    public Updatable(Boolean loadFromDatabase) {}
 
     /**
      * Sets updated date to now and updating user to logged in user
