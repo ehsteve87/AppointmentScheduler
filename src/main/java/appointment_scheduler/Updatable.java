@@ -86,6 +86,38 @@ public abstract class Updatable {
         return this.lastUpdate;
     }
 
+    /**
+     * Getter for create date string. Used by tableviews.
+     * @return create date string
+     */
+    public String getCreateDateString() {
+        return createDateString;
+    }
+
+    /**
+     * Getter for last update string. Used by tableviews.
+     * @return create date string
+     */
+    public String getLastUpdateString() {
+        return lastUpdateString;
+    }
+
+    /**
+     * Getter for created by string. Used by tableviews.
+     * @return created by string
+     */
+    public String getCreatedByString() {
+        return createdByString;
+    }
+
+    /**
+     * Getter for last updated by string. Used by tableviews.
+     * @return last updated by string
+     */
+    public String getLastUpdatedByString() {
+        return lastUpdatedByString;
+    }
+
 
     //These setters should only be used when creating objects from database imports
 

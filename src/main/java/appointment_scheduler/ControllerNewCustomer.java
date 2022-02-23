@@ -125,7 +125,6 @@ public class ControllerNewCustomer {
                     "'" + User.getLoggedInUser().getUsername() + "',\n" +
                     "'" + division.getId() + "'\n" +
                     ");";
-            System.out.println(sql);
             try(var ps = JDBC.conn.prepareStatement(sql)){
                 ps.executeUpdate();
                 cancelButtonNewCustomer(event);
